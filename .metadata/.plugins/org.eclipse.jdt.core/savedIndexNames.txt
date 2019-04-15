@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+/home/mariaeduardahang/Desktop/Trabalho_ES1/.metadata/.plugins/org.eclipse.jdt.core
+3324638088.index
+646308851.index
+3840383749.index
