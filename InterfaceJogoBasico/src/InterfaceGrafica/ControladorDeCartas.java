@@ -7,9 +7,10 @@ import java.awt.LayoutManager;
 import javax.swing.JPanel;
 
 public class ControladorDeCartas extends PanelArredondado {
-	protected Carta[] deck = new Carta[10];
-	protected Carta[] mao = new Carta[5];
-	protected Carta[] descarte = new Carta[10];
+	// TODO na porra toda
+	protected CartaView[] deck = new CartaView[10];
+	protected CartaView[] mao = new CartaView[5];
+	protected CartaView[] descarte = new CartaView[10];
 
 	public ControladorDeCartas() {
 		super();
@@ -26,7 +27,7 @@ public class ControladorDeCartas extends PanelArredondado {
 		
 		// Gambiarrinha só pra mostrar pro professor
 		for (int i = 0; i < mao.length; i++) {
-			this.mao[i] = new Carta(TiposCartas.DEFAULT);
+			this.mao[i] = new CartaView();
 			this.add(this.mao[i], 0, i);
 		}
 	}

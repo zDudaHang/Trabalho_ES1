@@ -1,16 +1,17 @@
 package InterfaceGrafica;
 
 import java.awt.Color;
+import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
-public class Posicao extends JButton {
+public class PosicaoView extends JButton {
 	protected int x;
 	protected int y;
 	
-	public Posicao(int x, int y) {
+	public PosicaoView(int x, int y, ActionListener action) {
 		super();
 		
 		this.setBorderPainted(false);
@@ -27,24 +28,26 @@ public class Posicao extends JButton {
 		// Fixa tamanho do botão
 		this.setSize(60, 60);
 		this.setToolTipText("(" + x + ", " + y + ")");
+		
+		this.addActionListener(action);
 	}
 
-	public Posicao(Icon arg0) {
+	public PosicaoView(Icon arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public Posicao(String arg0) {
+	public PosicaoView(String arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public Posicao(Action arg0) {
+	public PosicaoView(Action arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public Posicao(String arg0, Icon arg1) {
+	public PosicaoView(String arg0, Icon arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
 	}

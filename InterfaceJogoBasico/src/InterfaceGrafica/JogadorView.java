@@ -1,12 +1,12 @@
 package InterfaceGrafica;
 
-public class Jogador {	
+public class JogadorView {	
 	protected ControladorDeCartas controlador;
 	protected String nome;
 //	protected pecas Peca;
 	protected boolean podeUsarCarta;
 
-	public Jogador() {
+	public JogadorView() {
 		
 		// Inicializa controlador de cartas do jogador
 		controlador = new ControladorDeCartas();

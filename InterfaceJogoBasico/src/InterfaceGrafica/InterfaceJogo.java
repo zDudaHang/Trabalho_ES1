@@ -27,7 +27,7 @@ public class InterfaceJogo {
 	private final Action action_2 = new SwingAction_2();
 	private AtorJogador atorJogador;
 
-	protected Jogador jogador;
+	protected JogadorView jogador;
 	protected InformacoesDeJogo informacoes;
 
 	/**
@@ -58,7 +58,7 @@ public class InterfaceJogo {
 	 */
 	private void initialize() {
 		atorJogador = new AtorJogador();
-		jogador = new Jogador();
+		jogador = new JogadorView();
 		
 		frame = new JFrame();
 		frame.setAlwaysOnTop(true);
@@ -87,7 +87,7 @@ public class InterfaceJogo {
 		mnNewMenu.add(mntmIniciarPartida);
 		
 		// Cria tabuleiro
-		Tabuleiro tabuleiro = new Tabuleiro();
+		TabuleiroView tabuleiro = new TabuleiroView();
 		tabuleiro.setLocation(210, 30);
 		frame.getContentPane().add(tabuleiro);
 		
