@@ -11,7 +11,6 @@ public class AtorJogador {
 	public AtorJogador() {
 		ngServer = new AtorNetgames();
 		domProblema = new ElementoDominioProblema();
-
 	}
 
 	public String conectar(String string, String string2) {

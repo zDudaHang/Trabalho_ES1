@@ -13,11 +13,13 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.time.temporal.JulianFields;
 
 public class InterfaceJogo {
 
@@ -99,8 +101,6 @@ public class InterfaceJogo {
 		
 		// Insere o controlador de cartas do ator jogador
 		frame.getContentPane().add(jogador.getControlador());
-		
-		
 	}
 	private class SwingAction extends AbstractAction {
 		/**
@@ -111,10 +111,34 @@ public class InterfaceJogo {
 			putValue(NAME, "conectar");
 			putValue(SHORT_DESCRIPTION, "conectar a Netgames Server");
 		}
+
 		public void actionPerformed(ActionEvent e) {
-			// Necess�rio definir endere�o do servidor e nome do jogador
-			String mensagem = atorJogador.conectar("localhost", "nomeJogador?");
-			JOptionPane.showMessageDialog(null, mensagem);
+			JTextField name_field = new JTextField();
+			JTextField server_field = new JTextField("localhost");
+			
+			Object[] field_to_fill = {
+				    "Nome:", name_field,
+				    "Servidor:", server_field
+				};
+			
+			int option = JOptionPane.showConfirmDialog(null, field_to_fill, "Dados da conexão", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				String server = server_field.getText();
+				String name = name_field.getText();
+				
+				if (!name.isEmpty() && !server.isEmpty()) {
+					String mensagem = atorJogador.conectar(server_field.getText(), name_field.getText());
+					JOptionPane.showMessageDialog(null, mensagem);
+
+				} else {
+					JOptionPane.showMessageDialog(null, "Entrada inválida!");
+				}
+
+			} else {
+				JOptionPane.showMessageDialog(null, "Conexão cancelada.");
+			}
+			
+			
 		}
 	}
 	private class SwingAction_1 extends AbstractAction {
