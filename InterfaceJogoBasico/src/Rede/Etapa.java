@@ -1,0 +1,10 @@
+package Rede;
+
+public enum Etapa {
+	COMPRA,
+	USO_CARTA_COMECO,
+	DANO,
+	MOVIMENTO,
+	USO_CARTA_FIM,
+	ENCERRAR_TURNO,
+}

@@ -7,11 +7,13 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
+import DominioDoProblema.Pecas.PecaIdentificacao;
+
 public class PosicaoView extends JButton {
 	protected int x;
 	protected int y;
 	
-	public PosicaoView(int x, int y, ActionListener action) {
+	public PosicaoView(int x, int y, PecaView pecaview, ActionListener action) {
 		super();
 		
 		this.setBorderPainted(false);
@@ -27,29 +29,12 @@ public class PosicaoView extends JButton {
 		
 		// Fixa tamanho do botão
 		this.setSize(60, 60);
-		this.setToolTipText("(" + x + ", " + y + ")");
 		
 		this.addActionListener(action);
+		
+		
+		if (pecaview != null) {
+			this.setIcon(pecaview.getIcon());
+		}
 	}
-
-	public PosicaoView(Icon arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public PosicaoView(String arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public PosicaoView(Action arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public PosicaoView(String arg0, Icon arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
-
 }

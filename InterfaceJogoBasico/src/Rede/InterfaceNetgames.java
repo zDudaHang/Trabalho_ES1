@@ -10,12 +10,12 @@ import br.ufsc.inf.leobr.cliente.exception.JahConectadoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoConectadoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoPossivelConectarException;
 
-public class AtorNetgames implements OuvidorProxy {
+public class InterfaceNetgames implements OuvidorProxy {
 	
 	private static final long serialVersionUID = 1L;
 	protected Proxy proxy;
 	
-	public AtorNetgames() {
+	public InterfaceNetgames() {
 		super();
 		this.proxy = Proxy.getInstance();
 		proxy.addOuvinte(this);	

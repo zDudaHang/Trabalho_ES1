@@ -21,7 +21,7 @@ public class TabuleiroView extends JPanel {
 				final int X = x;
 				final int Y = y;
 				// Configura o click do botão para chamar um listener atrelado ao tabuleiro
-				this.posicoes[x][y] = new PosicaoView(x, y, new ActionListener() {
+				this.posicoes[x][y] = new PosicaoView(x, y, null, new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
@@ -34,23 +34,7 @@ public class TabuleiroView extends JPanel {
 		}
 	}
 	
-
-	public TabuleiroView(LayoutManager arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public TabuleiroView(boolean arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public TabuleiroView(LayoutManager arg0, boolean arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
-	
 	public void buttonClicked(int x, int y) {
-		JOptionPane.showConfirmDialog(null, "(" + x + ", " + y + ")");
+		
 	}
 }

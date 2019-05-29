@@ -19,7 +19,7 @@ public class InterfaceJogo {
 	private final Action action = new SwingAction();
 	private final Action action_1 = new SwingAction_1();
 	private final Action action_2 = new SwingAction_2();
-	private AtorJogador atorJogador;
+	private InterfaceJogador atorJogador;
 
 	protected JogadorView jogador;
 	protected InformacoesDeJogo informacoes;
@@ -51,7 +51,7 @@ public class InterfaceJogo {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		atorJogador = new AtorJogador();
+		atorJogador = new InterfaceJogador();
 		jogador = new JogadorView();
 		
 		frame = new JFrame();
@@ -92,7 +92,7 @@ public class InterfaceJogo {
 		
 		
 		// Insere o controlador de cartas do ator jogador
-		frame.getContentPane().add(jogador.getControlador());
+		frame.getContentPane().add(jogador.getInfo());
 	}
 	private class SwingAction extends AbstractAction {
 		/**
