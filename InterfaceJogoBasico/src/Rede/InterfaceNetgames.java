@@ -1,7 +1,6 @@
 package Rede;
 
-import javax.swing.JOptionPane;
-
+import InterfaceGrafica.InterfaceJogador;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
 import br.ufsc.inf.leobr.cliente.Proxy;
@@ -14,11 +13,13 @@ public class InterfaceNetgames implements OuvidorProxy {
 	
 	private static final long serialVersionUID = 1L;
 	protected Proxy proxy;
+	protected InterfaceJogador atorJogador;
 	
-	public InterfaceNetgames() {
+	public InterfaceNetgames(InterfaceJogador jogador) {
 		super();
 		this.proxy = Proxy.getInstance();
-		proxy.addOuvinte(this);	
+		proxy.addOuvinte(this);
+		this.atorJogador = jogador;
 	}
 	
 	public String conectar(String servidor, String nome) {
@@ -65,8 +66,13 @@ public class InterfaceNetgames implements OuvidorProxy {
 
 	@Override
 	public void iniciarNovaPartida(Integer posicao) {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null, "o servidor enviou solicitacao de inicio de partida e isso deve ser tratado segundo as regras do seu jogo");
+		// Obtém nome do jogador adversário pela posição, que será jogador 2 se a posição
+		// do jogador local for 1, e 1 caso contrário
+		String nomeAdversario = this.proxy.obterNomeAdversario(posicao == 1 ? 2 : 1);
+		String nomeJogadorLocal = this.proxy.getNomeJogador();
+		
+		// Envia comando para atorJogador iniciar a partida
+		this.atorJogador.iniciarNovaPartida(posicao, nomeAdversario, nomeJogadorLocal);
 	}
 
 	@Override

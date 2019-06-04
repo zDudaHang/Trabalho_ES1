@@ -8,10 +8,13 @@ public abstract class Peca {
 	protected boolean podeSeMovimentar;
 	protected EstadoPeca estado;
 	protected boolean jogadorLocal;
+	protected PecaIdentificacao id;
 	/*
 	 * Construtor padrão
 	 */
-	public Peca(int numeroDeCasas, boolean jogadorLocal) {
+	public Peca(int numeroDeCasas, boolean jogadorLocal, PecaIdentificacao id) {
+		this.id = id;
+		
 		// Inicialmente, toda peça pode se mover
 		this.podeSeMovimentar = true;
 		
@@ -63,5 +66,29 @@ public abstract class Peca {
 	 */
 	public void removePeca() {
 		this.estado = EstadoPeca.REMOVIDA;
+	}
+
+	public EstadoPeca getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoPeca estado) {
+		this.estado = estado;
+	}
+
+	public boolean isJogadorLocal() {
+		return jogadorLocal;
+	}
+
+	public void setJogadorLocal(boolean jogadorLocal) {
+		this.jogadorLocal = jogadorLocal;
+	}
+
+	public PecaIdentificacao getId() {
+		return id;
+	}
+
+	public void setId(PecaIdentificacao id) {
+		this.id = id;
 	}
 }

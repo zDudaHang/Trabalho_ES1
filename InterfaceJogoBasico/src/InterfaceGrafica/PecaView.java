@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import DominioDoProblema.Pecas.PecaIdentificacao;
 
+
 public class PecaView extends JLabel {
 	public PecaView(PecaIdentificacao id) {
 		this.setHorizontalAlignment(CENTER);

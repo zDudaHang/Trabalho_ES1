@@ -1,9 +1,15 @@
 package DominioDoProblema;
 
+import Rede.Etapa;
+
 public class Jogo {
 	
 	protected boolean conectado = false;
 	protected boolean partidaAndamento = false;
+	
+	protected Jogador jogadorLocal;
+	protected Tabuleiro tabuleiro;
+	protected Etapa etapaAtual;
 
 	public Jogo() {
 		// TODO Auto-generated constructor stub
@@ -38,6 +44,14 @@ public class Jogo {
 	public boolean permitidoIniciarPartida() {
 		return !partidaAndamento;
 		// defina a l�gica do seu jogo
+	}
+
+	public void iniciarNovaPartida(Integer posicao, String nomeAdversario, String nomeJogadorLocal) {
+		this.tabuleiro = new Tabuleiro();
+		this.tabuleiro.configurarTabuleiro(posicao == 1);
+		
+		this.jogadorLocal = new Jogador(posicao == 1, nomeJogadorLocal);
+		
 	}
 
 

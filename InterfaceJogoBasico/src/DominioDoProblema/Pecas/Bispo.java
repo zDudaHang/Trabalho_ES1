@@ -2,10 +2,9 @@ package DominioDoProblema.Pecas;
 
 public class Bispo extends Peca {
 
-	public Bispo(boolean jogadorLocal) {
+	public Bispo(boolean jogadorLocal, boolean jogadorLocalComeca) {
 		// O bispo se move 2 casas por vez
-		super(2, jogadorLocal);
-		// TODO Auto-generated constructor stub
+		super(2, jogadorLocal, jogadorLocalComeca ? PecaIdentificacao.BISPO_BRANCO : PecaIdentificacao.BISPO_PRETO);
 	}
 
 	@Override
