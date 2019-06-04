@@ -70,7 +70,6 @@ public class InterfaceNetgames implements OuvidorProxy {
 		// do jogador local for 1, e 1 caso contrário
 		String nomeAdversario = this.proxy.obterNomeAdversario(posicao == 1 ? 2 : 1);
 		String nomeJogadorLocal = this.proxy.getNomeJogador();
-		
 		// Envia comando para atorJogador iniciar a partida
 		this.atorJogador.iniciarNovaPartida(posicao, nomeAdversario, nomeJogadorLocal);
 	}

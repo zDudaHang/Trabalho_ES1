@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import DominioDoProblema.Pecas.PecaIdentificacao;

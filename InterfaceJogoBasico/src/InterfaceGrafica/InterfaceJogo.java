@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import javax.swing.JTextField;
 
+import DominioDoProblema.Tabuleiro;
+
 public class InterfaceJogo {
 
 	private JFrame frame;
@@ -23,6 +25,7 @@ public class InterfaceJogo {
 
 	protected JogadorView jogador;
 	protected InformacoesDeJogo informacoes;
+	protected TabuleiroView tabuleiroView;
 
 	/**
 	 * Launch the application.
@@ -51,7 +54,7 @@ public class InterfaceJogo {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		atorJogador = new InterfaceJogador();
+		atorJogador = new InterfaceJogador(this);
 		jogador = new JogadorView();
 		
 		frame = new JFrame();
@@ -81,9 +84,9 @@ public class InterfaceJogo {
 		mnNewMenu.add(mntmIniciarPartida);
 		
 		// Cria tabuleiro
-		TabuleiroView tabuleiro = new TabuleiroView();
-		tabuleiro.setLocation(210, 30);
-		frame.getContentPane().add(tabuleiro);
+		this.tabuleiroView = new TabuleiroView();
+		tabuleiroView.setLocation(210, 30);
+		frame.getContentPane().add(tabuleiroView);
 		
 		// Cria painel de mostra
 		informacoes = new InformacoesDeJogo();
@@ -160,5 +163,8 @@ public class InterfaceJogo {
 			String mensagem = atorJogador.iniciarPartida();
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
+	}
+	public void atualizarTabuleiro(Tabuleiro tabuleiro) {
+		this.tabuleiroView.atualizarTabuleiro(tabuleiro);
 	}
 }

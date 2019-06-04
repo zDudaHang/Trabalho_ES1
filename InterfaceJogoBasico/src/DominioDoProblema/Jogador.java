@@ -1,13 +1,11 @@
 package DominioDoProblema;
 
-import DominioDoProblema.Pecas.Peca;
 
 public class Jogador {
 	protected String nome;
 	protected ControladorDeCartas controlador;
 	protected boolean podeUsarCarta;
 	protected boolean usouCarta;
-//	protected Peca[] pecas;
 	protected boolean ehVencedor;
 	protected boolean ehJogadorDaVez;
 	protected boolean jogaPrimeiro;

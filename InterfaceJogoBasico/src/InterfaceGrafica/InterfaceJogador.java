@@ -6,9 +6,11 @@ import Rede.InterfaceNetgames;
 public class InterfaceJogador {
 	
 	protected InterfaceNetgames ngServer;
+	protected InterfaceJogo interfaceJogo;
 	protected Jogo jogo;
 
-	public InterfaceJogador() {
+	public InterfaceJogador(InterfaceJogo interfaceJogo) {
+		this.interfaceJogo = interfaceJogo;
 		ngServer = new InterfaceNetgames(this);
 		jogo = new Jogo();
 	}
@@ -48,6 +50,9 @@ public class InterfaceJogador {
 
 	public void iniciarNovaPartida(Integer posicao, String nomeAdversario, String nomeJogadorLocal) {
 		this.jogo.iniciarNovaPartida(posicao, nomeAdversario, nomeJogadorLocal);
+		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
 		
+		this.interfaceJogo.informacoes.setNomeJogador(nomeJogadorLocal);
+		this.interfaceJogo.informacoes.setNomeOponente(nomeAdversario);
 	}
 }

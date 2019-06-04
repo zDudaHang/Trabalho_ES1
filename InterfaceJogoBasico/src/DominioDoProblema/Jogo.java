@@ -51,8 +51,45 @@ public class Jogo {
 		this.tabuleiro.configurarTabuleiro(posicao == 1);
 		
 		this.jogadorLocal = new Jogador(posicao == 1, nomeJogadorLocal);
-		
 	}
 
+	public boolean isConectado() {
+		return conectado;
+	}
 
+	public void setConectado(boolean conectado) {
+		this.conectado = conectado;
+	}
+
+	public boolean isPartidaAndamento() {
+		return partidaAndamento;
+	}
+
+	public void setPartidaAndamento(boolean partidaAndamento) {
+		this.partidaAndamento = partidaAndamento;
+	}
+
+	public Jogador getJogadorLocal() {
+		return jogadorLocal;
+	}
+
+	public void setJogadorLocal(Jogador jogadorLocal) {
+		this.jogadorLocal = jogadorLocal;
+	}
+
+	public Tabuleiro getTabuleiro() {
+		return tabuleiro;
+	}
+
+	public void setTabuleiro(Tabuleiro tabuleiro) {
+		this.tabuleiro = tabuleiro;
+	}
+
+	public Etapa getEtapaAtual() {
+		return etapaAtual;
+	}
+
+	public void setEtapaAtual(Etapa etapaAtual) {
+		this.etapaAtual = etapaAtual;
+	}
 }
