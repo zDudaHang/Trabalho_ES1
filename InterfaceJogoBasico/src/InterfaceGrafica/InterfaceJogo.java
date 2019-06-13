@@ -14,6 +14,7 @@ import javax.swing.Action;
 import javax.swing.JTextField;
 
 import DominioDoProblema.Tabuleiro;
+import Rede.Etapa;
 
 public class InterfaceJogo {
 
@@ -164,7 +165,44 @@ public class InterfaceJogo {
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
+
 	public void atualizarTabuleiro(Tabuleiro tabuleiro) {
 		this.tabuleiroView.atualizarTabuleiro(tabuleiro);
+	}
+	
+	public void setJogadorAtivo(Boolean jogadorLocalAtivo) {
+		this.informacoes.setJogadorAtivo(jogadorLocalAtivo);
+	}
+	
+	public void setFaseDoTurno(Etapa etapa) {
+		String text;
+		switch(etapa) {
+		case COMPRA:
+			text = "Etapa de compra";
+			break;
+		case DANO:
+			text = "Etapa de dano";
+			break;
+		case ENCERRAR_TURNO:
+			text = "Encerramento de turno";
+			break;
+		case MOVIMENTO:
+			text = "Etapa de movimentação";
+			break;
+		case USO_CARTA_COMECO:
+			text = "Você pode usar uma carta";
+			break;
+		case USO_CARTA_FIM:
+			text = "Você pode usar uma carta";
+			break;
+		case AGUARDANDO_ADVERSARIO:
+			text = "Aguardando adversário";
+			break;
+		default:
+			text = "Etapa incerta.(falha de programação)";
+			break;
+		
+		}
+		this.informacoes.setFaseDoTurno(text);
 	}
 }

@@ -51,6 +51,8 @@ public class Jogo {
 		this.tabuleiro.configurarTabuleiro(posicao == 1);
 		
 		this.jogadorLocal = new Jogador(posicao == 1, nomeJogadorLocal);
+		
+		this.etapaAtual = posicao == 1 ? Etapa.USO_CARTA_COMECO : Etapa.AGUARDANDO_ADVERSARIO;
 	}
 
 	public boolean isConectado() {

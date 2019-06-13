@@ -1,7 +1,10 @@
 package InterfaceGrafica;
 
 import DominioDoProblema.Jogo;
+import Rede.Acao;
+import Rede.Etapa;
 import Rede.InterfaceNetgames;
+import br.ufsc.inf.leobr.cliente.Jogada;
 
 public class InterfaceJogador {
 	
@@ -51,8 +54,16 @@ public class InterfaceJogador {
 	public void iniciarNovaPartida(Integer posicao, String nomeAdversario, String nomeJogadorLocal) {
 		this.jogo.iniciarNovaPartida(posicao, nomeAdversario, nomeJogadorLocal);
 		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
-		
 		this.interfaceJogo.informacoes.setNomeJogador(nomeJogadorLocal);
 		this.interfaceJogo.informacoes.setNomeOponente(nomeAdversario);
+		this.interfaceJogo.setFaseDoTurno(posicao == 1 ? Etapa.USO_CARTA_COMECO : Etapa.AGUARDANDO_ADVERSARIO);
+		this.interfaceJogo.setJogadorAtivo(posicao == 1);
+	}
+
+	public void receberJogada(Jogada jogada) {
+		// Implementar recebimento da jogada
+		Acao acao = (Acao) jogada;
+		this.jogo.setTabuleiro(acao.getTabuleiroModificado());
+		this.interfaceJogo.atualizarInformacoes(acao.getQtdDeck(), acao.getQtdDescarte(), acao.getQtdMao());
 	}
 }

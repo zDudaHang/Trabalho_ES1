@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Rede.Etapa;
 import net.miginfocom.swing.MigLayout;
 
 import java.awt.GridLayout;
@@ -72,13 +73,9 @@ public class InformacoesDeJogo extends PanelArredondado {
 	void setNomeOponente(String nome) {
 		this.oponente.setNome(nome);
 	}
-	
-	public String getJogadorAtivo() {
-		return jogadorAtivo.getText();
-	}
 
-	public void setJogadorAtivo(String jogadorAtivo) {
-		this.jogadorAtivo.setText(jogadorAtivo);
+	public void setJogadorAtivo(Boolean jogadorLocalAtivo) {
+		this.jogadorAtivo.setText(jogadorLocalAtivo ? "Seu turno" : "Turno do adversário");
 	}
 
 	public String getFaseDoTurno() {

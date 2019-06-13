@@ -87,8 +87,7 @@ public class InterfaceNetgames implements OuvidorProxy {
 
 	@Override
 	public void receberJogada(Jogada jogada) {
-		// TODO Auto-generated method stub
-		
+		this.atorJogador.receberJogada(jogada);		
 	}
 
 	@Override
