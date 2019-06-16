@@ -9,6 +9,7 @@ public class Jogador {
 	protected boolean ehVencedor;
 	protected boolean ehJogadorDaVez;
 	protected boolean jogaPrimeiro;
+	protected boolean ehBranco;
 	
 	public Jogador(boolean jogaPrimeiro, String nome) {
 		this.jogaPrimeiro = jogaPrimeiro;
@@ -21,5 +22,18 @@ public class Jogador {
 		this.podeUsarCarta = true;
 		this.usouCarta = false;
 		this.ehJogadorDaVez = jogaPrimeiro;
+		this.ehBranco = jogaPrimeiro;
+	}
+	
+	public ControladorDeCartas getControlador() {
+		return this.controlador;
+	}
+	
+	public boolean isBranco() {
+		return ehBranco;
+	}
+	
+	public boolean isJogadorDaVez() {
+		return ehJogadorDaVez;
 	}
 }

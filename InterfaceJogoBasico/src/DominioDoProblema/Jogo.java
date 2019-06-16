@@ -1,5 +1,8 @@
 package DominioDoProblema;
 
+import DominioDoProblema.Cartas.Carta;
+import DominioDoProblema.Cartas.CartaIdentificacao;
+import DominioDoProblema.Pecas.PecaIdentificacao;
 import Rede.Etapa;
 
 public class Jogo {
@@ -94,4 +97,29 @@ public class Jogo {
 	public void setEtapaAtual(Etapa etapaAtual) {
 		this.etapaAtual = etapaAtual;
 	}
+
+	public int usarCarta(Carta carta) {
+		if (carta.isAfetaJogadorAdversario() && carta.isAfetaJogadorLocal()) {
+			carta.aplicarEfeito(null, null, this.getJogadorLocal(), null); // Precisa dos dois jogadores
+			return 1; // Precisa enviar o efeito para o outro jogador
+		}
+		if(carta.isAfetaPecaAdversaria() && carta.isAfetaPecaLocal()) {
+			return 2; // Precisa de uma peca adversaria e uma local
+		}
+		if(carta.isAfetaPecaLocal()) {
+			return 3; // Precisa de uma peca local
+		}
+		if(carta.isAfetaPecaAdversaria()) {
+			return 4; // Precisa de uma peca adversaria
+		}
+		if (carta.isAfetaJogadorLocal()) {
+			carta.aplicarEfeito(null, null, jogadorLocal, null);
+			return -1;
+		}
+		if (carta.isAfetaJogadorAdversario()) {
+			return 1; // Precisa enviar o efeito para o outro jogador
+		}
+		return -1;
+	}
+
 }

@@ -1,7 +1,7 @@
 package DominioDoProblema.Pecas;
 
 import DominioDoProblema.Jogador;
-import DominioDoProblema.Cartas.EstadoPeca;
+import DominioDoProblema.Pecas.EstadoPeca;
 
 public abstract class Peca {
 	protected int numeroDeCasas;
@@ -9,6 +9,7 @@ public abstract class Peca {
 	protected EstadoPeca estado;
 	protected boolean jogadorLocal;
 	protected PecaIdentificacao id;
+//	protected PecaIdentificacao cor;
 	/*
 	 * Construtor padrão
 	 */

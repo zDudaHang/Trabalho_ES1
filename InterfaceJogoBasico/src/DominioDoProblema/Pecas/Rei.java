@@ -1,6 +1,6 @@
 package DominioDoProblema.Pecas;
 
-import DominioDoProblema.Cartas.EstadoPeca;
+import DominioDoProblema.Pecas.EstadoPeca;
 
 public class Rei extends Peca  {
 	

@@ -1,23 +1,21 @@
 package DominioDoProblema.Cartas;
 
-public class SacrificioNecessario extends Carta {
+import DominioDoProblema.Jogador;
+import DominioDoProblema.Pecas.Peca;
 
+public class SacrificioNecessario extends Carta {
+	public SacrificioNecessario() {
+		this.id = CartaIdentificacao.SACRIFICIO;
+		this.nome = "Sacrifício Necessário";
+		this.descricao = "Sacrifício Necessário";
+		this.afetaPecaAdversaria = true;
+		this.afetaPecaLocal = true;
+	}
+	
 	@Override
-	void aplicarEfeito() {
+	public void aplicarEfeito(Peca pecaLocal, Peca pecaAdversaria, Jogador jogadorLocal, Jogador jogadorAdversario) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	String getDescricao() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	String getNome() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

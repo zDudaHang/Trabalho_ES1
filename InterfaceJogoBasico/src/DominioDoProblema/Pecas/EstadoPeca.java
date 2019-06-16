@@ -1,4 +1,4 @@
-package DominioDoProblema.Cartas;
+package DominioDoProblema.Pecas;
 
 public enum EstadoPeca {
 	NO_TABULEIRO,

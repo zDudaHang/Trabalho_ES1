@@ -1,23 +1,21 @@
 package DominioDoProblema.Cartas;
 
+import DominioDoProblema.Jogador;
+import DominioDoProblema.Pecas.Peca;
+
 public class MaosAoAlto extends Carta {
+	
+	public MaosAoAlto () {
+		this.id = CartaIdentificacao.MAOS_AO_ALTO;
+		this.nome = "Mãos ao alto";
+		this.descricao = "Mãos ao alto";
+		this.afetaPecaAdversaria = true;
+	}
 
 	@Override
-	void aplicarEfeito() {
+	public void aplicarEfeito(Peca pecaLocal, Peca pecaAdversaria, Jogador jogadorLocal, Jogador jogadorAdversario) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	String getDescricao() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	String getNome() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
