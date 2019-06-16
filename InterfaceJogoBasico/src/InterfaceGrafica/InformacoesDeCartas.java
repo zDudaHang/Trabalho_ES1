@@ -1,14 +1,21 @@
 package InterfaceGrafica;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+import java.util.List;
+
+import DominioDoProblema.ControladorDeCartas;
+import DominioDoProblema.Cartas.Carta;
+import DominioDoProblema.Cartas.CartaIdentificacao;
 
 public class InformacoesDeCartas extends PanelArredondado {
-	// TODO na porra toda
-	protected CartaView[] deck = new CartaView[10];
-	protected CartaView[] mao = new CartaView[5];
-	protected CartaView[] descarte = new CartaView[10];
+	// TODO na porra toda	
+	protected List<CartaView> deck = new ArrayList<CartaView>();
+	protected List<CartaView> mao = new ArrayList<CartaView>();
+	protected List<CartaView> descarte = new ArrayList<CartaView>();
 
-	public InformacoesDeCartas() {
+	public InformacoesDeCartas(MouseAdapter cardHandler) {
 		super();
 		GridLayout layout = new GridLayout(1, 5);
 		layout.setVgap(2);
@@ -17,10 +24,26 @@ public class InformacoesDeCartas extends PanelArredondado {
 		
 		this.setSize(680, 180);
 		
-		// Gambiarrinha só pra mostrar pro professor
-		for (int i = 0; i < mao.length; i++) {
-			this.mao[i] = new CartaView();
-			this.add(this.mao[i], 0, i);
+		this.deck.clear();
+		this.mao.clear();
+		this.descarte.clear();
+		
+		int i = 0;
+		while(this.mao.size() != 5) {
+			this.mao.add(new CartaView());
+			this.mao.get(i).addMouseListener(cardHandler);
+			this.add(this.mao.get(i), 0, i);
+			i++;
 		}
+	}
+
+	public int atualizarMao(ControladorDeCartas controlador) {
+		for(int i = 0; i < controlador.getMao().size(); i++) {
+			Carta carta = controlador.getMao().get(i);
+			this.mao.get(i).setId(carta.getId());
+			this.mao.get(i).setCarta(carta);
+			this.mao.get(i).atualizarIcon();
+		}
+		return controlador.getMao().size();
 	}
 }

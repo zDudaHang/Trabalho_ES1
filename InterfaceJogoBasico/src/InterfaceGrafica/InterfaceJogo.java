@@ -1,5 +1,6 @@
 package InterfaceGrafica;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,23 +11,39 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
+import DominioDoProblema.ControladorDeCartas;
 import DominioDoProblema.Tabuleiro;
+import DominioDoProblema.Cartas.Carta;
+import DominioDoProblema.Cartas.CartaIdentificacao;
+import DominioDoProblema.Pecas.Peca;
+import DominioDoProblema.Pecas.PecaIdentificacao;
 import Rede.Etapa;
 
 public class InterfaceJogo {
 
 	private JFrame frame;
-	private final Action action = new SwingAction();
-	private final Action action_1 = new SwingAction_1();
-	private final Action action_2 = new SwingAction_2();
+//	private final Action action = new SwingAction();
+//	private final Action action_1 = new SwingAction_1();
+//	private final Action action_2 = new SwingAction_2();
 	private InterfaceJogador atorJogador;
 
 	protected JogadorView jogador;
 	protected InformacoesDeJogo informacoes;
 	protected TabuleiroView tabuleiroView;
+	
+	protected PosicaoView posicaoEscolhida;
+	protected Carta cartaUsada;
+	
+	protected PecaIdentificacao pecaLocal;
+	protected PecaIdentificacao pecaAdversaria;
 
 	/**
 	 * Launch the application.
@@ -56,7 +73,6 @@ public class InterfaceJogo {
 	 */
 	private void initialize() {
 		atorJogador = new InterfaceJogador(this);
-		jogador = new JogadorView();
 		
 		frame = new JFrame();
 		frame.setAlwaysOnTop(true);
@@ -73,19 +89,60 @@ public class InterfaceJogo {
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmConectar = new JMenuItem("conectar");
-		mntmConectar.setAction(action);
+//		mntmConectar.setAction(action);
 		mnNewMenu.add(mntmConectar);
 		
 		JMenuItem mntmDesconectar = new JMenuItem("desconectar");
-		mntmDesconectar.setAction(action_1);
+//		mntmDesconectar.setAction(action_1);
 		mnNewMenu.add(mntmDesconectar);
 		
 		JMenuItem mntmIniciarPartida = new JMenuItem("iniciar partida");
-		mntmIniciarPartida.setAction(action_2);
+//		mntmIniciarPartida.setAction(action_2);
 		mnNewMenu.add(mntmIniciarPartida);
 		
+
+		class MenuHandler implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JMenuItem item = (JMenuItem)e.getSource();
+				switch(item.getText()) {
+				case "conectar":
+					conectarUsuario();
+					break;
+				case "desconectar":
+					desconectarUsuario();
+					break;
+				case "iniciar partida":
+					iniciarPartida();
+					break;
+				}
+			
+			}
+		}
+		
+		MenuHandler handler = new MenuHandler();
+		
+		mntmConectar.addActionListener(handler);
+		mntmDesconectar.addActionListener(handler);
+		mntmIniciarPartida.addActionListener(handler);
+		
+		ActionListener tabuleiroHandler = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(atorJogador.jogo.getJogadorLocal().isJogadorDaVez()) {
+					PosicaoView pView = (PosicaoView)e.getSource();
+					System.out.println("(" + pView.x + "," + pView.y + ") = " + pView.idPeca);
+					atualizarPosicaoEscolhida(pView);
+					usarCarta();
+				} else {
+					System.out.println("Não é sua vez :/");
+				}
+			}
+		};
+		
 		// Cria tabuleiro
-		this.tabuleiroView = new TabuleiroView();
+		this.tabuleiroView = new TabuleiroView(tabuleiroHandler);
 		tabuleiroView.setLocation(210, 30);
 		frame.getContentPane().add(tabuleiroView);
 		
@@ -94,76 +151,45 @@ public class InterfaceJogo {
 		informacoes.setLocation(10, 30);
 		frame.getContentPane().add(informacoes);
 		
+		MouseAdapter cardHandler = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CartaView c = (CartaView) e.getSource();
+				Carta carta = c.getCarta();
+				atualizarCarta(carta);
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				CartaView c = (CartaView)e.getSource();
+				c.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				CartaView c = (CartaView)e.getSource();
+				c.setBorder(null);
+			}
+		};
+		
+		jogador = new JogadorView(cardHandler);
 		
 		// Insere o controlador de cartas do ator jogador
 		frame.getContentPane().add(jogador.getInfo());
+		
 	}
-	private class SwingAction extends AbstractAction {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		public SwingAction() {
-			putValue(NAME, "conectar");
-			putValue(SHORT_DESCRIPTION, "conectar a Netgames Server");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			JTextField name_field = new JTextField();
-			JTextField server_field = new JTextField("localhost");
-			
-			Object[] field_to_fill = {
-				    "Nome:", name_field,
-				    "Servidor:", server_field
-				};
-			
-			int option = JOptionPane.showConfirmDialog(null, field_to_fill, "Dados da conexão", JOptionPane.OK_CANCEL_OPTION);
-			if (option == JOptionPane.OK_OPTION) {
-				String server = server_field.getText();
-				String name = name_field.getText();
-				
-				if (!name.isEmpty() && !server.isEmpty()) {
-					String mensagem = atorJogador.conectar(server_field.getText(), name_field.getText());
-					JOptionPane.showMessageDialog(null, mensagem);
-
-				} else {
-					JOptionPane.showMessageDialog(null, "Entrada inválida!");
-				}
-
-			} else {
-				JOptionPane.showMessageDialog(null, "Conexão cancelada.");
-			}
-			
-			
-		}
+	
+	public void atualizarPosicaoEscolhida(PosicaoView pView) {
+		System.out.print("Pview = " + pView.idPeca);
+		this.posicaoEscolhida = pView;
+		System.out.print("PosicaoEscolhida = " + posicaoEscolhida.idPeca);
+		int resposta = tratarPeca();
 	}
-	private class SwingAction_1 extends AbstractAction {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		public SwingAction_1() {
-			putValue(NAME, "desconectar");
-			putValue(SHORT_DESCRIPTION, "desconectar de Netgames Server");
-		}
-		public void actionPerformed(ActionEvent e) {
-			String mensagem = atorJogador.desconectar();
-			JOptionPane.showMessageDialog(null, mensagem);
-		}
-	}
-	private class SwingAction_2 extends AbstractAction {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		public SwingAction_2() {
-			putValue(NAME, "iniciar partida");
-			putValue(SHORT_DESCRIPTION, "iniciar partida do seu jogo");
-		}
-		public void actionPerformed(ActionEvent e) {
-			String mensagem = atorJogador.iniciarPartida();
-			JOptionPane.showMessageDialog(null, mensagem);
-		}
+
+	public int tratarPeca() {
+		boolean jogadorComBranco = this.atorJogador.jogo.getJogadorLocal().isBranco();
+		
+		return 0;
 	}
 
 	public void atualizarTabuleiro(Tabuleiro tabuleiro) {
@@ -204,5 +230,75 @@ public class InterfaceJogo {
 		
 		}
 		this.informacoes.setFaseDoTurno(text);
+	}
+
+	public void conectarUsuario() {
+		JTextField name_field = new JTextField();
+		JTextField server_field = new JTextField("localhost");
+		
+		Object[] field_to_fill = {
+			    "Nome:", name_field,
+			    "Servidor:", server_field
+			};
+		
+		int option = JOptionPane.showConfirmDialog(null, field_to_fill, "Dados da conexão", JOptionPane.OK_CANCEL_OPTION);
+		if (option == JOptionPane.OK_OPTION) {
+			String server = server_field.getText();
+			String name = name_field.getText();
+			
+			if (!name.isEmpty() && !server.isEmpty()) {
+				String mensagem = atorJogador.conectar(server_field.getText(), name_field.getText());
+				JOptionPane.showMessageDialog(null, mensagem);
+	
+			} else {
+				JOptionPane.showMessageDialog(null, "Entrada inválida!");
+			}
+	
+		} else {
+			JOptionPane.showMessageDialog(null, "Conexão cancelada.");
+		}
+	}
+	
+	public void desconectarUsuario() {
+		String mensagem = atorJogador.desconectar();
+		JOptionPane.showMessageDialog(null, mensagem);
+	}
+	
+	public void iniciarPartida() {
+		String mensagem = atorJogador.iniciarPartida();
+		JOptionPane.showMessageDialog(null, mensagem);
+	}
+
+	public void atualizarCartas(ControladorDeCartas controlador) {
+		int tamanhoMao = this.jogador.info.atualizarMao(controlador);
+		this.informacoes.getJogador().setCartasMao(tamanhoMao);
+	}
+	
+	public void atualizarCarta(Carta carta) {
+		this.cartaUsada = carta;
+		System.out.print("CartaUsada = " + this.cartaUsada.getId());
+		if (carta.isAfetaPecaLocal()) {
+			JOptionPane.showMessageDialog(null, "Escolha uma peça sua.");
+		}
+	}
+
+	
+	public void usarCarta() {
+		System.out.println(this.posicaoEscolhida.idPeca);
+		System.out.println(this.cartaUsada.getId());
+		this.pecaLocal = posicaoEscolhida.idPeca;
+		posicaoEscolhida = null;
+//		cartaUsada.aplicarEfeito(, pecaAdversaria, jogadorLocal, jogadorAdversario);
+	}
+
+	// Maos ao Alto
+	public PecaView pegarPecaAdversaria(boolean ehBranco, CartaIdentificacao id) {
+		System.out.println("Pegar peça adversária");
+		return null;
+		
+	}
+	
+	public boolean ehBranca(PecaView p) {
+		return (p.id == PecaIdentificacao.REI_BRANCO || p.id == PecaIdentificacao.TORRE_BRANCA || p.id == PecaIdentificacao.BISPO_BRANCO);
 	}
 }

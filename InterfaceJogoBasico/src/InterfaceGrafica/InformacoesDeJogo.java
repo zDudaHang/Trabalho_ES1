@@ -20,6 +20,11 @@ import javax.swing.Box;
 
 public class InformacoesDeJogo extends PanelArredondado {
 	private InformacoesDeJogador jogador, oponente;
+	
+	public InformacoesDeJogador getJogador() {
+		return jogador;
+	}
+
 	private JLabel faseDoTurno;
 	private JLabel jogadorAtivo;
 	private Box verticalBox;

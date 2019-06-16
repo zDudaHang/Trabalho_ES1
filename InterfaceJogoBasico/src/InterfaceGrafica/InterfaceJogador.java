@@ -1,6 +1,10 @@
 package InterfaceGrafica;
 
+import DominioDoProblema.ControladorDeCartas;
 import DominioDoProblema.Jogo;
+import DominioDoProblema.Cartas.Carta;
+import DominioDoProblema.Cartas.CartaIdentificacao;
+import DominioDoProblema.Pecas.PecaIdentificacao;
 import Rede.Acao;
 import Rede.Etapa;
 import Rede.InterfaceNetgames;
@@ -58,12 +62,43 @@ public class InterfaceJogador {
 		this.interfaceJogo.informacoes.setNomeOponente(nomeAdversario);
 		this.interfaceJogo.setFaseDoTurno(posicao == 1 ? Etapa.USO_CARTA_COMECO : Etapa.AGUARDANDO_ADVERSARIO);
 		this.interfaceJogo.setJogadorAtivo(posicao == 1);
+		ControladorDeCartas controlador = this.jogo.getJogadorLocal().getControlador();
+		controlador.inicializar();
+		this.interfaceJogo.atualizarCartas(controlador);
+		
 	}
 
 	public void receberJogada(Jogada jogada) {
 		// Implementar recebimento da jogada
 		Acao acao = (Acao) jogada;
 		this.jogo.setTabuleiro(acao.getTabuleiroModificado());
-		this.interfaceJogo.atualizarInformacoes(acao.getQtdDeck(), acao.getQtdDescarte(), acao.getQtdMao());
+//		this.interfaceJogo.atualizarInformacoes(acao.getQtdDeck(), acao.getQtdDescarte(), acao.getQtdMao());
+	}
+
+	public void usarCarta(Carta carta) {
+		PecaView pecaLocal = null;
+		PecaView pecaAdversaria = null;
+		
+		boolean ehBranco = this.jogo.getJogadorLocal().isBranco();
+		CartaIdentificacao id = carta.getId();
+	
+		int r = this.jogo.usarCarta(carta);
+		if(r > 0) {
+			switch (r) {
+			case 1:
+				System.out.println("Precisa enviar para o adversária :)");
+				break;
+			case 2: 
+				pecaLocal = this.interfaceJogo.pegarPecaLocal(ehBranco, id);
+				pecaAdversaria = this.interfaceJogo.pegarPecaAdversaria(!ehBranco, id);
+				break;
+			case 3 : 
+				pecaLocal = this.interfaceJogo.pegarPecaLocal(ehBranco, id);
+				break;
+			case 4:
+				pecaAdversaria = this.interfaceJogo.pegarPecaAdversaria(!ehBranco, id);
+				break;
+			}
+		}
 	}
 }

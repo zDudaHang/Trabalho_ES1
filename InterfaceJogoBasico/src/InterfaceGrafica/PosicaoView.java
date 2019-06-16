@@ -13,6 +13,7 @@ import DominioDoProblema.Pecas.PecaIdentificacao;
 public class PosicaoView extends JButton {
 	protected int x;
 	protected int y;
+	protected PecaIdentificacao idPeca;
 	
 	public PosicaoView(int x, int y, PecaView pecaview, ActionListener action) {
 		super();
@@ -35,6 +36,7 @@ public class PosicaoView extends JButton {
 		
 		
 		if (pecaview != null) {
+			this.idPeca = pecaview.id;
 			this.setIcon(pecaview.getIcon());
 		}
 	}

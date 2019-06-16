@@ -10,7 +10,11 @@ import DominioDoProblema.Pecas.PecaIdentificacao;
 
 
 public class PecaView extends JLabel {
+	
+	protected PecaIdentificacao id;
+	
 	public PecaView(PecaIdentificacao id) {
+		this.id = id;
 		this.setHorizontalAlignment(CENTER);
 		this.setVerticalAlignment(CENTER);
 		
