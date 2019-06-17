@@ -16,4 +16,10 @@ public class JogadorView {
 	public InformacoesDeCartas getInfo() {
 		return info;
 	}
+
+	public void habilitarCartas(boolean habilitar) {
+		for (int i = 0; i < this.info.mao.size(); i++) {
+			this.info.mao.get(i).setEnabled(habilitar);
+		}
+	}
 }

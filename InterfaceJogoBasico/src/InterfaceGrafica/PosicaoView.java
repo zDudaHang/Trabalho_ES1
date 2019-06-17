@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,4 +41,14 @@ public class PosicaoView extends JButton {
 			this.setIcon(pecaview.getIcon());
 		}
 	}
+	
+//	@Override
+//	public void setEnabled(boolean b) {
+//		super.setEnabled(b);
+//		if (b) {
+//		this.setBorder(BorderFactory.createLineBorder(new Color(255, 0, 0)));
+//		} else {
+//			this.setBorder(null);
+//		}
+//	}
 }

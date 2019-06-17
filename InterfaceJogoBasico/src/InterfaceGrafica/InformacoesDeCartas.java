@@ -41,7 +41,6 @@ public class InformacoesDeCartas extends PanelArredondado {
 		for(int i = 0; i < controlador.getMao().size(); i++) {
 			Carta carta = controlador.getMao().get(i);
 			this.mao.get(i).setId(carta.getId());
-			this.mao.get(i).setCarta(carta);
 			this.mao.get(i).atualizarIcon();
 		}
 		return controlador.getMao().size();

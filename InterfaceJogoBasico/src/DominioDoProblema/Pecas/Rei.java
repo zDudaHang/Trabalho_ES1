@@ -1,12 +1,14 @@
 package DominioDoProblema.Pecas;
 
+import java.util.UUID;
+
 import DominioDoProblema.Pecas.EstadoPeca;
 
 public class Rei extends Peca  {
 	
-	public Rei(boolean jogadorLocal, boolean jogadorLocalComeca) {
+	public Rei(int idJogador, boolean jogadorLocalComeca) {
 		// O rei só se mover 1 casa por vez
-		super(1, jogadorLocal, jogadorLocalComeca ? PecaIdentificacao.REI_BRANCO : PecaIdentificacao.REI_PRETO);
+		super(1, jogadorLocalComeca ? PecaIdentificacao.REI_BRANCO : PecaIdentificacao.REI_PRETO, idJogador);
 	}
 	
 	public boolean estaMorto() {

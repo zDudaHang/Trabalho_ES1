@@ -1,20 +1,24 @@
 package DominioDoProblema.Pecas;
 
-import DominioDoProblema.Jogador;
 import DominioDoProblema.Pecas.EstadoPeca;
 
 public abstract class Peca {
 	protected int numeroDeCasas;
 	protected boolean podeSeMovimentar;
 	protected EstadoPeca estado;
-	protected boolean jogadorLocal;
 	protected PecaIdentificacao id;
+	protected int idJogador;
+	protected boolean habilitada;
 //	protected PecaIdentificacao cor;
 	/*
 	 * Construtor padrão
 	 */
-	public Peca(int numeroDeCasas, boolean jogadorLocal, PecaIdentificacao id) {
+	public Peca(int numeroDeCasas, PecaIdentificacao id, int idJogador) {
 		this.id = id;
+		
+		this.habilitada = false;
+		
+		this.idJogador = idJogador;
 		
 		// Inicialmente, toda peça pode se mover
 		this.podeSeMovimentar = true;
@@ -24,9 +28,6 @@ public abstract class Peca {
 		
 		// Seta número de casas
 		this.numeroDeCasas = numeroDeCasas;
-		
-		// Seta o dono da peça
-		this.jogadorLocal = jogadorLocal;
 	}
 	
 	/*
@@ -77,19 +78,27 @@ public abstract class Peca {
 		this.estado = estado;
 	}
 
-	public boolean isJogadorLocal() {
-		return jogadorLocal;
-	}
-
-	public void setJogadorLocal(boolean jogadorLocal) {
-		this.jogadorLocal = jogadorLocal;
-	}
-
 	public PecaIdentificacao getId() {
 		return id;
 	}
 
 	public void setId(PecaIdentificacao id) {
 		this.id = id;
+	}
+
+	public boolean isHabilitada() {
+		return habilitada;
+	}
+
+	public void setHabilitada(boolean habilitada) {
+		this.habilitada = habilitada;
+	}
+
+	public int getIdJogador() {
+		return idJogador;
+	}
+
+	public void setIdJogador(int idJogador) {
+		this.idJogador = idJogador;
 	}
 }

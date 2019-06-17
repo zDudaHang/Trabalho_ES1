@@ -20,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
 import DominioDoProblema.ControladorDeCartas;
+import DominioDoProblema.Respostas;
 import DominioDoProblema.Tabuleiro;
 import DominioDoProblema.Cartas.Carta;
 import DominioDoProblema.Cartas.CartaIdentificacao;
@@ -33,17 +34,11 @@ public class InterfaceJogo {
 //	private final Action action = new SwingAction();
 //	private final Action action_1 = new SwingAction_1();
 //	private final Action action_2 = new SwingAction_2();
-	private InterfaceJogador atorJogador;
+	private AtorJogador atorJogador;
 
 	protected JogadorView jogador;
 	protected InformacoesDeJogo informacoes;
 	protected TabuleiroView tabuleiroView;
-	
-	protected PosicaoView posicaoEscolhida;
-	protected Carta cartaUsada;
-	
-	protected PecaIdentificacao pecaLocal;
-	protected PecaIdentificacao pecaAdversaria;
 
 	/**
 	 * Launch the application.
@@ -72,7 +67,7 @@ public class InterfaceJogo {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		atorJogador = new InterfaceJogador(this);
+		atorJogador = new AtorJogador(this);
 		
 		frame = new JFrame();
 		frame.setAlwaysOnTop(true);
@@ -102,7 +97,6 @@ public class InterfaceJogo {
 		
 
 		class MenuHandler implements ActionListener {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem item = (JMenuItem)e.getSource();
@@ -133,8 +127,6 @@ public class InterfaceJogo {
 				if(atorJogador.jogo.getJogadorLocal().isJogadorDaVez()) {
 					PosicaoView pView = (PosicaoView)e.getSource();
 					System.out.println("(" + pView.x + "," + pView.y + ") = " + pView.idPeca);
-					atualizarPosicaoEscolhida(pView);
-					usarCarta();
 				} else {
 					System.out.println("Não é sua vez :/");
 				}
@@ -155,10 +147,42 @@ public class InterfaceJogo {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				CartaView c = (CartaView) e.getSource();
-				Carta carta = c.getCarta();
-				atualizarCarta(carta);
+				Respostas r = atorJogador.cartaClicada(c.getId());
+				
+				switch (r) {
+				case NAO_EH_O_MOMENTO:
+					JOptionPane.showMessageDialog(null, "Não é sua vez de fazer isso =(");
+					break;
+					
+				case NADA:
+					break;
+					
+				case SELECIONAR_TORRE:
+					informacoes.setFaseDoTurno("Selecione uma de suas torres");
+					break;
+					
+				case SELECIONAR_UMA_PECA_ADVERSARIA:
+					informacoes.setFaseDoTurno("Selecione uma peça adversária");
+					break;
+					
+				case SELECIONAR_UMA_PECA_LOCAL:
+					informacoes.setFaseDoTurno("Selecione uma peça sua");
+					break;
+					
+				case SELECIONAR_LOCAL_E_ADVERSARIA_NAO_REI:
+					informacoes.setFaseDoTurno("Selecione uma peça sua e uma peça adversária");
+					break;
+					
+				case SELECIONAR_UMA_PECA_LOCAL_NAO_REI:
+					informacoes.setFaseDoTurno("Selecione uma peça sua que não seja o rei");
+					break;
+					
+				default:
+					break;
+
+				}
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				CartaView c = (CartaView)e.getSource();
@@ -177,19 +201,6 @@ public class InterfaceJogo {
 		// Insere o controlador de cartas do ator jogador
 		frame.getContentPane().add(jogador.getInfo());
 		
-	}
-	
-	public void atualizarPosicaoEscolhida(PosicaoView pView) {
-		System.out.print("Pview = " + pView.idPeca);
-		this.posicaoEscolhida = pView;
-		System.out.print("PosicaoEscolhida = " + posicaoEscolhida.idPeca);
-		int resposta = tratarPeca();
-	}
-
-	public int tratarPeca() {
-		boolean jogadorComBranco = this.atorJogador.jogo.getJogadorLocal().isBranco();
-		
-		return 0;
 	}
 
 	public void atualizarTabuleiro(Tabuleiro tabuleiro) {
@@ -274,22 +285,21 @@ public class InterfaceJogo {
 		this.informacoes.getJogador().setCartasMao(tamanhoMao);
 	}
 	
-	public void atualizarCarta(Carta carta) {
-		this.cartaUsada = carta;
-		System.out.print("CartaUsada = " + this.cartaUsada.getId());
-		if (carta.isAfetaPecaLocal()) {
-			JOptionPane.showMessageDialog(null, "Escolha uma peça sua.");
-		}
-	}
-
-	
-	public void usarCarta() {
-		System.out.println(this.posicaoEscolhida.idPeca);
-		System.out.println(this.cartaUsada.getId());
-		this.pecaLocal = posicaoEscolhida.idPeca;
-		posicaoEscolhida = null;
-//		cartaUsada.aplicarEfeito(, pecaAdversaria, jogadorLocal, jogadorAdversario);
-	}
+//	public void atualizarCarta(Carta carta) {
+//		this.cartaUsada = carta;
+//		System.out.print("CartaUsada = " + this.cartaUsada.getId());
+//		if (carta.isAfetaPecaLocal()) {
+//			JOptionPane.showMessageDialog(null, "Escolha uma peça sua.");
+//		}
+//	}
+//
+//	
+//	public void usarCarta() {
+//		System.out.println(this.posicaoEscolhida.idPeca);
+//		System.out.println(this.cartaUsada.getId());
+//		posicaoEscolhida = null;
+////		cartaUsada.aplicarEfeito(, pecaAdversaria, jogadorLocal, jogadorAdversario);
+//	}
 
 	// Maos ao Alto
 	public PecaView pegarPecaAdversaria(boolean ehBranco, CartaIdentificacao id) {
@@ -300,5 +310,13 @@ public class InterfaceJogo {
 	
 	public boolean ehBranca(PecaView p) {
 		return (p.id == PecaIdentificacao.REI_BRANCO || p.id == PecaIdentificacao.TORRE_BRANCA || p.id == PecaIdentificacao.BISPO_BRANCO);
+	}
+
+	public void cartaClicada(CartaIdentificacao id) {
+		this.atorJogador.cartaClicada(id);
+	}
+
+	public void habilitarCartas(boolean habilitar) {
+		this.jogador.habilitarCartas(habilitar);
 	}
 }

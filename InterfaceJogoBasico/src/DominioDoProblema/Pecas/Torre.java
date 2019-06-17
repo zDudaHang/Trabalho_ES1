@@ -1,11 +1,12 @@
 package DominioDoProblema.Pecas;
 
+import java.util.UUID;
+
 public class Torre extends Peca {
 
-	public Torre(boolean jogadorLocal, boolean jogadorLocalComeca) {
+	public Torre(int idJogadorLocal, boolean jogadorLocalComeca) {
 		// A torre se move 4 casas por vez
-		super(4, jogadorLocal, jogadorLocalComeca ? PecaIdentificacao.TORRE_BRANCA : PecaIdentificacao.TORRE_PRETA);
-		// TODO Auto-generated constructor stub
+		super(4, jogadorLocalComeca ? PecaIdentificacao.TORRE_BRANCA : PecaIdentificacao.TORRE_PRETA, idJogadorLocal);
 	}
 
 	@Override

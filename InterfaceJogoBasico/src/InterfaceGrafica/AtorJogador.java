@@ -2,6 +2,7 @@ package InterfaceGrafica;
 
 import DominioDoProblema.ControladorDeCartas;
 import DominioDoProblema.Jogo;
+import DominioDoProblema.Respostas;
 import DominioDoProblema.Cartas.Carta;
 import DominioDoProblema.Cartas.CartaIdentificacao;
 import DominioDoProblema.Pecas.PecaIdentificacao;
@@ -10,13 +11,13 @@ import Rede.Etapa;
 import Rede.InterfaceNetgames;
 import br.ufsc.inf.leobr.cliente.Jogada;
 
-public class InterfaceJogador {
+public class AtorJogador {
 	
 	protected InterfaceNetgames ngServer;
 	protected InterfaceJogo interfaceJogo;
 	protected Jogo jogo;
 
-	public InterfaceJogador(InterfaceJogo interfaceJogo) {
+	public AtorJogador(InterfaceJogo interfaceJogo) {
 		this.interfaceJogo = interfaceJogo;
 		ngServer = new InterfaceNetgames(this);
 		jogo = new Jogo();
@@ -75,30 +76,10 @@ public class InterfaceJogador {
 //		this.interfaceJogo.atualizarInformacoes(acao.getQtdDeck(), acao.getQtdDescarte(), acao.getQtdMao());
 	}
 
-	public void usarCarta(Carta carta) {
-		PecaView pecaLocal = null;
-		PecaView pecaAdversaria = null;
-		
-		boolean ehBranco = this.jogo.getJogadorLocal().isBranco();
-		CartaIdentificacao id = carta.getId();
-	
-		int r = this.jogo.usarCarta(carta);
-		if(r > 0) {
-			switch (r) {
-			case 1:
-				System.out.println("Precisa enviar para o adversária :)");
-				break;
-			case 2: 
-				pecaLocal = this.interfaceJogo.pegarPecaLocal(ehBranco, id);
-				pecaAdversaria = this.interfaceJogo.pegarPecaAdversaria(!ehBranco, id);
-				break;
-			case 3 : 
-				pecaLocal = this.interfaceJogo.pegarPecaLocal(ehBranco, id);
-				break;
-			case 4:
-				pecaAdversaria = this.interfaceJogo.pegarPecaAdversaria(!ehBranco, id);
-				break;
-			}
-		}
+	public Respostas cartaClicada(CartaIdentificacao id) {
+		Respostas retorno = this.jogo.cartaClicada(id);
+		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+		this.interfaceJogo.habilitarCartas(false);
+		return retorno;
 	}
 }

@@ -1,6 +1,6 @@
 package Rede;
 
-import InterfaceGrafica.InterfaceJogador;
+import InterfaceGrafica.AtorJogador;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
 import br.ufsc.inf.leobr.cliente.Proxy;
@@ -13,9 +13,9 @@ public class InterfaceNetgames implements OuvidorProxy {
 	
 	private static final long serialVersionUID = 1L;
 	protected Proxy proxy;
-	protected InterfaceJogador atorJogador;
+	protected AtorJogador atorJogador;
 	
-	public InterfaceNetgames(InterfaceJogador jogador) {
+	public InterfaceNetgames(AtorJogador jogador) {
 		super();
 		this.proxy = Proxy.getInstance();
 		proxy.addOuvinte(this);
