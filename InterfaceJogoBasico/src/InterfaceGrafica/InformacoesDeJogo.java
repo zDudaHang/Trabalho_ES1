@@ -1,35 +1,32 @@
 package InterfaceGrafica;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-import Rede.Etapa;
-import net.miginfocom.swing.MigLayout;
+import DominioDoProblema.Etapa;
 
-import java.awt.GridLayout;
 import java.net.URL;
 
 import javax.swing.Box;
 
 
 public class InformacoesDeJogo extends PanelArredondado {
+	private static final long serialVersionUID = 4563781218869376936L;
 	private InformacoesDeJogador jogador, oponente;
 	
 	public InformacoesDeJogador getJogador() {
 		return jogador;
 	}
 
-	private JLabel faseDoTurno;
-	private JLabel jogadorAtivo;
+	private AutoBreakLineLabel faseDoTurno;
+	private JLabel etapaDoTurno;
 	private Box verticalBox;
 
-	public InformacoesDeJogo() {
+	public InformacoesDeJogo(JButton botaoPassarEtapa) {
 		this.setSize(190, 480);
 		BorderLayout layout = new BorderLayout(25, 25);
 		setLayout(layout);
@@ -38,8 +35,8 @@ public class InformacoesDeJogo extends PanelArredondado {
 		
 		this.jogador = new InformacoesDeJogador();
 		this.oponente = new InformacoesDeJogador();
-		this.faseDoTurno = new JLabel();
-		this.jogadorAtivo = new JLabel();
+		this.faseDoTurno = new AutoBreakLineLabel();
+		this.etapaDoTurno = new JLabel();
 		
 		// Testing Purposes
 		jogador.setNome("Jogador Local");
@@ -54,15 +51,16 @@ public class InformacoesDeJogo extends PanelArredondado {
 		jogador.setCartasDescarte(0);
 		oponente.setCartasDescarte(0);
 		
-		faseDoTurno.setText("Aguardando uso de carta");
-		jogadorAtivo.setText("Seu turno");
+		faseDoTurno.setText("Inicie um jogo.");
+		etapaDoTurno.setText("Nenhum jogo está em andamento =(");
 		// End testing Purposes
 		URL url = getClass().getResource("/kingCrown.png");
 		JLabel logo = new JLabel(new ImageIcon(url));
 		verticalBox = Box.createVerticalBox();		
 		verticalBox.add(logo);
-		verticalBox.add(this.jogadorAtivo);
+		verticalBox.add(this.etapaDoTurno);
 		verticalBox.add(this.faseDoTurno);
+		verticalBox.add(botaoPassarEtapa);
 		
 		
 		this.add(this.oponente, BorderLayout.NORTH);
@@ -79,8 +77,21 @@ public class InformacoesDeJogo extends PanelArredondado {
 		this.oponente.setNome(nome);
 	}
 
-	public void setJogadorAtivo(Boolean jogadorLocalAtivo) {
-		this.jogadorAtivo.setText(jogadorLocalAtivo ? "Seu turno" : "Turno do adversário");
+	public void atualizarEtapaDoTurno(Etapa etapa) {
+		switch (etapa) {
+		case AGUARDANDO_ADVERSARIO:
+			this.etapaDoTurno.setText("Aguardando adversário");
+			break;
+		case MOVIMENTO:
+			this.etapaDoTurno.setText("Etapa de movimento");
+			break;
+		case USO_CARTA_COMECO:
+		case USO_CARTA_FIM:
+			this.etapaDoTurno.setText("Uso de carta");
+		default:
+			break;
+		
+		}
 	}
 
 	public String getFaseDoTurno() {

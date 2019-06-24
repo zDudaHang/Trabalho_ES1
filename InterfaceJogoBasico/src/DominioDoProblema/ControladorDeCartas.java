@@ -3,8 +3,6 @@ package DominioDoProblema;
 import java.util.ArrayList;
 import java.util.List;
 
-import DominioDoProblema.Cartas.Carta;
-
 import DominioDoProblema.Cartas.*;
 
 import java.util.Random;
@@ -33,16 +31,16 @@ public class ControladorDeCartas {
 		
 		CorredoresExperientes ce = new CorredoresExperientes();
 		Escudos e = new Escudos();
-		Espiar esp = new Espiar();
 		MaosAoAlto ma = new MaosAoAlto();
-		MovimentoBrusco mb = new MovimentoBrusco();
-		Reciclagem rc = new Reciclagem();
 		SacrificioNecessario sn = new SacrificioNecessario();
-		SairPelaTangente st = new SairPelaTangente();
 		SaveTheKing stk = new SaveTheKing();
 		SilencioPorFavor spf = new SilencioPorFavor();
+		MovimentoBrusco mb1 = new MovimentoBrusco();
+		MovimentoBrusco mb2 = new MovimentoBrusco();
+		SairPelaTangente st1 = new SairPelaTangente();
+		SairPelaTangente st2 = new SairPelaTangente();
 		
-		Carta[] cartas = {ce,e,esp,ma,mb,rc,sn,st,stk,spf};
+		Carta[] cartas = {ce, e, ma, mb1, mb2, sn, st1, st2, stk, spf};
 		
 		for(int i = 0; i < cartas.length; i++) {
 			this.deck.add(cartas[i]);
@@ -59,5 +57,44 @@ public class ControladorDeCartas {
 			this.mao.add(c);
 			this.deck.remove(c);
 		}
+	}
+	public int getTamanhoMao() {
+		return this.mao.size();
+	}
+	public int getTamanhoDeck() {
+		return this.deck.size();
+	}
+	public int getTamanhoDescarte() {
+		return this.descarte.size();
+	}
+	public Carta getCartaDaMao(CartaIdentificacao cartaUsada) {
+		for (int i = 0; i < this.getTamanhoMao(); i++) {
+			Carta carta = this.mao.get(i);
+			if (carta.getId() == cartaUsada) {
+				this.mao.remove(i);
+				return carta;
+			}
+		}
+		return null;
+	}
+	public boolean comprarCarta() {
+		if (this.getTamanhoDescarte() > 0) {
+			Random random = new Random();
+			int indice = random.nextInt(this.deck.size());
+			Carta c = deck.remove(indice);
+			this.mao.add(c);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public CartaIdentificacao[] idCartasMao() {
+		int tamanhoMao = this.getTamanhoMao();
+		CartaIdentificacao[] cartas = new CartaIdentificacao[tamanhoMao];
+		for (int i = 0; i < tamanhoMao; i++) {
+			cartas[i] = this.mao.get(i).getId();
+		}
+		
+		return cartas;
 	}
 }

@@ -9,31 +9,23 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import javax.swing.JMenu;
-import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import DominioDoProblema.ControladorDeCartas;
+import DominioDoProblema.Etapa;
 import DominioDoProblema.Respostas;
 import DominioDoProblema.Tabuleiro;
-import DominioDoProblema.Cartas.Carta;
 import DominioDoProblema.Cartas.CartaIdentificacao;
-import DominioDoProblema.Pecas.Peca;
-import DominioDoProblema.Pecas.PecaIdentificacao;
-import Rede.Etapa;
 
 public class InterfaceJogo {
 
 	private JFrame frame;
-//	private final Action action = new SwingAction();
-//	private final Action action_1 = new SwingAction_1();
-//	private final Action action_2 = new SwingAction_2();
 	private AtorJogador atorJogador;
 
 	protected JogadorView jogador;
@@ -84,15 +76,12 @@ public class InterfaceJogo {
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmConectar = new JMenuItem("conectar");
-//		mntmConectar.setAction(action);
 		mnNewMenu.add(mntmConectar);
 		
 		JMenuItem mntmDesconectar = new JMenuItem("desconectar");
-//		mntmDesconectar.setAction(action_1);
 		mnNewMenu.add(mntmDesconectar);
 		
 		JMenuItem mntmIniciarPartida = new JMenuItem("iniciar partida");
-//		mntmIniciarPartida.setAction(action_2);
 		mnNewMenu.add(mntmIniciarPartida);
 		
 
@@ -123,23 +112,39 @@ public class InterfaceJogo {
 		
 		ActionListener tabuleiroHandler = new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {				
 				if(atorJogador.jogo.getJogadorLocal().isJogadorDaVez()) {
 					PosicaoView pView = (PosicaoView)e.getSource();
-					System.out.println("(" + pView.x + "," + pView.y + ") = " + pView.idPeca);
-				} else {
-					System.out.println("Não é sua vez :/");
+					
+					Respostas r = atorJogador.posicaoClicada(pView.x, pView.y);
+					
+					atualizarTextos(r);
 				}
 			}
 		};
+		
 		
 		// Cria tabuleiro
 		this.tabuleiroView = new TabuleiroView(tabuleiroHandler);
 		tabuleiroView.setLocation(210, 30);
 		frame.getContentPane().add(tabuleiroView);
 		
+		// Criar botão de passar etapa
+		ActionListener botaoPassarEtapaListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (atorJogador.jogo.getJogadorLocal().isJogadorDaVez()) {
+					Respostas r = atorJogador.botaoPassarEtapa();
+					atualizarTextos(r);
+				}
+			}
+		};
+		JButton botaoPassarEtapa = new JButton("Passar etapa");
+		botaoPassarEtapa.addActionListener(botaoPassarEtapaListener);
+		botaoPassarEtapa.setLocation(30, 30);
+
 		// Cria painel de mostra
-		informacoes = new InformacoesDeJogo();
+		informacoes = new InformacoesDeJogo(botaoPassarEtapa);
 		informacoes.setLocation(10, 30);
 		frame.getContentPane().add(informacoes);
 		
@@ -149,38 +154,7 @@ public class InterfaceJogo {
 				CartaView c = (CartaView) e.getSource();
 				Respostas r = atorJogador.cartaClicada(c.getId());
 				
-				switch (r) {
-				case NAO_EH_O_MOMENTO:
-					JOptionPane.showMessageDialog(null, "Não é sua vez de fazer isso =(");
-					break;
-					
-				case NADA:
-					break;
-					
-				case SELECIONAR_TORRE:
-					informacoes.setFaseDoTurno("Selecione uma de suas torres");
-					break;
-					
-				case SELECIONAR_UMA_PECA_ADVERSARIA:
-					informacoes.setFaseDoTurno("Selecione uma peça adversária");
-					break;
-					
-				case SELECIONAR_UMA_PECA_LOCAL:
-					informacoes.setFaseDoTurno("Selecione uma peça sua");
-					break;
-					
-				case SELECIONAR_LOCAL_E_ADVERSARIA_NAO_REI:
-					informacoes.setFaseDoTurno("Selecione uma peça sua e uma peça adversária");
-					break;
-					
-				case SELECIONAR_UMA_PECA_LOCAL_NAO_REI:
-					informacoes.setFaseDoTurno("Selecione uma peça sua que não seja o rei");
-					break;
-					
-				default:
-					break;
-
-				}
+				atualizarTextos(r);
 			}
 
 			@Override
@@ -207,40 +181,8 @@ public class InterfaceJogo {
 		this.tabuleiroView.atualizarTabuleiro(tabuleiro);
 	}
 	
-	public void setJogadorAtivo(Boolean jogadorLocalAtivo) {
-		this.informacoes.setJogadorAtivo(jogadorLocalAtivo);
-	}
-	
-	public void setFaseDoTurno(Etapa etapa) {
-		String text;
-		switch(etapa) {
-		case COMPRA:
-			text = "Etapa de compra";
-			break;
-		case DANO:
-			text = "Etapa de dano";
-			break;
-		case ENCERRAR_TURNO:
-			text = "Encerramento de turno";
-			break;
-		case MOVIMENTO:
-			text = "Etapa de movimentação";
-			break;
-		case USO_CARTA_COMECO:
-			text = "Você pode usar uma carta";
-			break;
-		case USO_CARTA_FIM:
-			text = "Você pode usar uma carta";
-			break;
-		case AGUARDANDO_ADVERSARIO:
-			text = "Aguardando adversário";
-			break;
-		default:
-			text = "Etapa incerta.(falha de programação)";
-			break;
-		
-		}
-		this.informacoes.setFaseDoTurno(text);
+	public void setEtapaDoTurno(Etapa etapa) {
+		this.informacoes.atualizarEtapaDoTurno(etapa);
 	}
 
 	public void conectarUsuario() {
@@ -252,71 +194,94 @@ public class InterfaceJogo {
 			    "Servidor:", server_field
 			};
 		
-		int option = JOptionPane.showConfirmDialog(null, field_to_fill, "Dados da conexão", JOptionPane.OK_CANCEL_OPTION);
+		int option = JOptionPane.showConfirmDialog(frame, field_to_fill, "Dados da conexão", JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION) {
 			String server = server_field.getText();
 			String name = name_field.getText();
 			
 			if (!name.isEmpty() && !server.isEmpty()) {
 				String mensagem = atorJogador.conectar(server_field.getText(), name_field.getText());
-				JOptionPane.showMessageDialog(null, mensagem);
+				JOptionPane.showMessageDialog(frame, mensagem);
 	
 			} else {
-				JOptionPane.showMessageDialog(null, "Entrada inválida!");
+				JOptionPane.showMessageDialog(frame, "Entrada inválida!");
 			}
 	
 		} else {
-			JOptionPane.showMessageDialog(null, "Conexão cancelada.");
+			JOptionPane.showMessageDialog(frame, "Conexão cancelada.");
 		}
 	}
 	
 	public void desconectarUsuario() {
 		String mensagem = atorJogador.desconectar();
-		JOptionPane.showMessageDialog(null, mensagem);
+		JOptionPane.showMessageDialog(frame, mensagem);
 	}
 	
 	public void iniciarPartida() {
 		String mensagem = atorJogador.iniciarPartida();
-		JOptionPane.showMessageDialog(null, mensagem);
+		JOptionPane.showMessageDialog(frame, mensagem);
 	}
 
-	public void atualizarCartas(ControladorDeCartas controlador) {
-		int tamanhoMao = this.jogador.info.atualizarMao(controlador);
-		this.informacoes.getJogador().setCartasMao(tamanhoMao);
-	}
-	
-//	public void atualizarCarta(Carta carta) {
-//		this.cartaUsada = carta;
-//		System.out.print("CartaUsada = " + this.cartaUsada.getId());
-//		if (carta.isAfetaPecaLocal()) {
-//			JOptionPane.showMessageDialog(null, "Escolha uma peça sua.");
-//		}
-//	}
-//
-//	
-//	public void usarCarta() {
-//		System.out.println(this.posicaoEscolhida.idPeca);
-//		System.out.println(this.cartaUsada.getId());
-//		posicaoEscolhida = null;
-////		cartaUsada.aplicarEfeito(, pecaAdversaria, jogadorLocal, jogadorAdversario);
-//	}
-
-	// Maos ao Alto
-	public PecaView pegarPecaAdversaria(boolean ehBranco, CartaIdentificacao id) {
-		System.out.println("Pegar peça adversária");
-		return null;
-		
-	}
-	
-	public boolean ehBranca(PecaView p) {
-		return (p.id == PecaIdentificacao.REI_BRANCO || p.id == PecaIdentificacao.TORRE_BRANCA || p.id == PecaIdentificacao.BISPO_BRANCO);
+	public void atualizarCartas(CartaIdentificacao[] cartas) {
+		this.jogador.info.atualizarMao(cartas);
+		this.informacoes.getJogador().setCartasMao(cartas.length);
 	}
 
 	public void cartaClicada(CartaIdentificacao id) {
-		this.atorJogador.cartaClicada(id);
+		Respostas r = this.atorJogador.cartaClicada(id);
+		
+		if (r == Respostas.NAO_EH_O_MOMENTO) {
+			JOptionPane.showMessageDialog(frame, "Não é o momento.");
+		}
 	}
 
 	public void habilitarCartas(boolean habilitar) {
 		this.jogador.habilitarCartas(habilitar);
+	}
+
+	public void atualizarTextos(Respostas resposta) {
+		switch (resposta) {
+		case NAO_EH_O_MOMENTO:
+			this.informacoes.setFaseDoTurno("Você deveria fazer isso?");
+			break;
+		case SELECIONAR_POSICAO:
+			this.informacoes.setFaseDoTurno("Selecione uma posição válida");
+			break;
+		case SELECIONAR_UMA_PECA_ADVERSARIA:
+			this.informacoes.setFaseDoTurno("Selecione uma peça adversária");
+			break;
+		case SELECIONAR_UMA_PECA_ADVERSARIA_NAO_REI:
+			this.informacoes.setFaseDoTurno("Selecione uma peça adversário que não seja o rei");
+			break;
+		case SELECIONAR_UMA_PECA_LOCAL:
+			this.informacoes.setFaseDoTurno("Selecione uma peça sua");
+			break;
+		case SELECIONAR_UMA_PECA_LOCAL_NAO_REI:
+			this.informacoes.setFaseDoTurno("Selecione uma peça sua que não seja o rei");
+			break;
+		case USAR_CARTA:
+			this.informacoes.setFaseDoTurno("Você pode usar uma carta");
+			break;
+		case VITORIA_DO_OPONENTE:
+			this.informacoes.setFaseDoTurno("Você perdeu =(");
+			break;
+		case AGUARDAR_ADVERSARIO:
+			this.informacoes.setFaseDoTurno("Aguarde seu oponente jogar");
+			break;
+		default:
+			this.informacoes.setFaseDoTurno("" + resposta);
+			break;
+
+		}
+	}
+
+	public void finalizarJogoComDerrota() {
+		JOptionPane.showMessageDialog(frame, "Jogo finalizado! Você perdeu!");
+		this.initialize();
+	}
+
+	public void finalizarJogoComVitoria() {
+		JOptionPane.showMessageDialog(frame, "Jogo finalizado! Você venceu!");
+		this.initialize();
 	}
 }

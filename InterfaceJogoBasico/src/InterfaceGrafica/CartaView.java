@@ -1,16 +1,10 @@
 package InterfaceGrafica;
 
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
-import DominioDoProblema.Cartas.Carta;
 import DominioDoProblema.Cartas.CartaIdentificacao;
 
 public class CartaView extends JLabel {
@@ -41,67 +35,61 @@ public class CartaView extends JLabel {
 	
 	public void atualizarIcon() {
 		switch (this.getId()) {
-			case CORREDORES_EXPERIENTES: {
-				URL url = getClass().getResource("/CorrExp.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case ESCUDOS: {
-				URL url = getClass().getResource("/Escudos.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case ESPIAR: {
-				URL url = getClass().getResource("/Espiar.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				
-				break;
-			}
-			case MAOS_AO_ALTO: {
-				URL url = getClass().getResource("/Maos.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case MOVIMENTO_BRUSCO: {
-				URL url = getClass().getResource("/MovBrusco.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case RECICLAGEM: {
-				URL url = getClass().getResource("/Reciclagem.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case SACRIFICIO: {
-				URL url = getClass().getResource("/Sacrificio.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case SAIR_PELA_TANGENTE: {
-				URL url = getClass().getResource("/Tangente.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case SAVE_THE_KING: {
-				URL url = getClass().getResource("/SaveTheKing.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
-			case SILENCIO_POR_FAVOR: {
-				URL url = getClass().getResource("/Silencio.png");
-				ImageIcon  img = new ImageIcon(url);
-				this.setIcon(img);
-				break;
-			}
+		case CORREDORES_EXPERIENTES: {
+			URL url = getClass().getResource("/CorrExp.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}
+		case ESCUDOS: {
+			URL url = getClass().getResource("/Escudos.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}		
+		case MAOS_AO_ALTO: {
+			URL url = getClass().getResource("/Maos.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}
+		case MOVIMENTO_BRUSCO: {
+			URL url = getClass().getResource("/MovBrusco.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}
+		case SACRIFICIO: {
+			URL url = getClass().getResource("/Sacrificio.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}
+		case SAIR_PELA_TANGENTE: {
+			URL url = getClass().getResource("/Tangente.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}
+		case SAVE_THE_KING: {
+			URL url = getClass().getResource("/SaveTheKing.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}
+		case SILENCIO_POR_FAVOR: {
+			URL url = getClass().getResource("/Silencio.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		}
+		case NENHUMA:
+			URL url = getClass().getResource("/backcard.png");
+			ImageIcon  img = new ImageIcon(url);
+			this.setIcon(img);
+			break;
+		default:
+			break;
 		}
 	}
 }

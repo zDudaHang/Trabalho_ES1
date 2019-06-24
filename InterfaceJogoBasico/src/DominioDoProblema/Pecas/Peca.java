@@ -1,22 +1,19 @@
 package DominioDoProblema.Pecas;
 
 import DominioDoProblema.Pecas.EstadoPeca;
+import br.ufsc.inf.leobr.cliente.Jogada;
 
-public abstract class Peca {
+public abstract class Peca implements Jogada {
 	protected int numeroDeCasas;
 	protected boolean podeSeMovimentar;
 	protected EstadoPeca estado;
 	protected PecaIdentificacao id;
 	protected int idJogador;
-	protected boolean habilitada;
-//	protected PecaIdentificacao cor;
 	/*
 	 * Construtor padrão
 	 */
 	public Peca(int numeroDeCasas, PecaIdentificacao id, int idJogador) {
 		this.id = id;
-		
-		this.habilitada = false;
 		
 		this.idJogador = idJogador;
 		
@@ -86,19 +83,16 @@ public abstract class Peca {
 		this.id = id;
 	}
 
-	public boolean isHabilitada() {
-		return habilitada;
-	}
-
-	public void setHabilitada(boolean habilitada) {
-		this.habilitada = habilitada;
-	}
-
 	public int getIdJogador() {
 		return idJogador;
 	}
 
 	public void setIdJogador(int idJogador) {
 		this.idJogador = idJogador;
+	}
+	
+	@Override
+	public String toString() {
+		return this.id + " idJogador:" + this.idJogador;
 	}
 }

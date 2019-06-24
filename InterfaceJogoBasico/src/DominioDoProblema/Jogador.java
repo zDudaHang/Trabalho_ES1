@@ -1,5 +1,8 @@
 package DominioDoProblema;
 
+import DominioDoProblema.Cartas.Carta;
+import DominioDoProblema.Cartas.CartaIdentificacao;
+import Rede.Acao;
 
 public class Jogador {
 	protected String nome;
@@ -9,7 +12,8 @@ public class Jogador {
 	protected boolean ehVencedor;
 	protected boolean ehJogadorDaVez;
 	protected boolean jogaPrimeiro;
-	protected int posicao;
+	protected int idJogador;
+	protected boolean podeLevarDano;
 	
 	public Jogador(boolean jogaPrimeiro, String nome) {
 		this.jogaPrimeiro = jogaPrimeiro;
@@ -17,13 +21,16 @@ public class Jogador {
 		
 		// Controlador para lidar com as cartas do jogador
 		this.controlador = new ControladorDeCartas();
+		this.controlador.inicializar();
 		
 		// Configurações iniciais
 		this.podeUsarCarta = true;
 		this.usouCarta = false;
 		this.ehJogadorDaVez = jogaPrimeiro;
 		
-		this.posicao = jogaPrimeiro ? 1 : 2;
+		this.idJogador = jogaPrimeiro ? 1 : 2;
+		
+		this.podeLevarDano = true;
 	}
 	
 	public ControladorDeCartas getControlador() {
@@ -83,15 +90,54 @@ public class Jogador {
 		this.jogaPrimeiro = jogaPrimeiro;
 	}
 
-	public int getPosicao() {
-		return posicao;
+	public int getIdJogador() {
+		return idJogador;
 	}
 
 	public void setPosicao(int posicao) {
-		this.posicao = posicao;
+		this.idJogador = posicao;
 	}
 
 	public void setControlador(ControladorDeCartas controlador) {
 		this.controlador = controlador;
+	}
+
+	public int getCartasMao() {
+		return this.controlador.getTamanhoMao();
+	}
+
+	public int getCartasDeck() {
+		return this.controlador.getTamanhoDeck();
+	}
+
+	public int getCartasDescarte() {
+		return this.controlador.getTamanhoDescarte();
+	}
+
+	public boolean isPodeLevarDano() {
+		return podeLevarDano;
+	}
+
+	public void setPodeLevarDano(boolean podeLevarDano) {
+		this.podeLevarDano = podeLevarDano;
+	}
+
+	public Carta pegarCartaDaMao(CartaIdentificacao cartaUsada) {
+		// Encontra carta na mão do jogador
+		Carta carta = this.controlador.getCartaDaMao(cartaUsada);
+		
+		return carta;
+	}
+
+	public boolean estaNoEstadoDeCompra() {
+		return this.getCartasDescarte() >= 5;
+	}
+
+	public boolean comprarCarta() {
+		return this.controlador.comprarCarta();
+	}
+
+	public CartaIdentificacao[] idCartasMao() {
+		return this.controlador.idCartasMao();
 	}
 }

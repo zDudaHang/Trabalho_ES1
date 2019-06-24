@@ -1,35 +1,16 @@
 package DominioDoProblema.Cartas;
 
+import java.util.List;
+
+import DominioDoProblema.Etapa;
 import DominioDoProblema.Jogador;
+import DominioDoProblema.Posicao;
+import DominioDoProblema.Tabuleiro;
 import DominioDoProblema.Cartas.CartaIdentificacao;
 import DominioDoProblema.Pecas.Peca;
+import Rede.Acao;
 
 public abstract class Carta {
-
-	public boolean isAfetaPecaLocal() {
-		return afetaPecaLocal;
-	}
-
-	public boolean isAfetaPecaAdversaria() {
-		return afetaPecaAdversaria;
-	}
-
-	public boolean isAfetaJogadorLocal() {
-		return afetaJogadorLocal;
-	}
-
-	public boolean isAfetaJogadorAdversario() {
-		return afetaJogadorAdversario;
-	}
-	
-	protected boolean afetaPecaLocal = false;
-
-	protected boolean afetaPecaAdversaria = false;
-	
-	protected boolean afetaJogadorLocal = false;
-	
-	protected boolean afetaJogadorAdversario = false;
-	
 	protected String descricao;
 	
 	protected String nome;
@@ -40,7 +21,7 @@ public abstract class Carta {
 		return this.id;
 	}
 	
-	public abstract void aplicarEfeito(Peca pecaLocal, Peca pecaAdversaria, Jogador jogadorLocal, Jogador jogadorAdversario);
+	public abstract Acao aplicarEfeito(Tabuleiro tabuleiro, int idAdversario, List<Peca> pecasSelecionadas, Posicao posicaoAlvo, Jogador jogadorLocal, Etapa etapa);
 	
 	public String getDescricao() {
 		return this.descricao;

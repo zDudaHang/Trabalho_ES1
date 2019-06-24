@@ -5,6 +5,8 @@ import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.CORBA.IdentifierHelper;
+
 import DominioDoProblema.ControladorDeCartas;
 import DominioDoProblema.Cartas.Carta;
 import DominioDoProblema.Cartas.CartaIdentificacao;
@@ -37,12 +39,18 @@ public class InformacoesDeCartas extends PanelArredondado {
 		}
 	}
 
-	public int atualizarMao(ControladorDeCartas controlador) {
-		for(int i = 0; i < controlador.getMao().size(); i++) {
-			Carta carta = controlador.getMao().get(i);
-			this.mao.get(i).setId(carta.getId());
+	public void atualizarMao(CartaIdentificacao[] cartas) {
+		int tamanhoMao = cartas.length;
+		// Atualiza icon das cartas na mão
+		for(int i = 0; i < tamanhoMao; i++) {
+			this.mao.get(i).setId(cartas[i]);
 			this.mao.get(i).atualizarIcon();
 		}
-		return controlador.getMao().size();
+		
+		// Atualiza icon das cartas na mão restantes até a quinta
+		for(int i = tamanhoMao; i < 5; i++) {
+			this.mao.get(i).setId(CartaIdentificacao.NENHUMA);
+			this.mao.get(i).atualizarIcon();
+		}
 	}
 }

@@ -1,15 +1,12 @@
 package InterfaceGrafica;
 
-import DominioDoProblema.ControladorDeCartas;
+import DominioDoProblema.Etapa;
 import DominioDoProblema.Jogo;
 import DominioDoProblema.Respostas;
-import DominioDoProblema.Cartas.Carta;
 import DominioDoProblema.Cartas.CartaIdentificacao;
-import DominioDoProblema.Pecas.PecaIdentificacao;
 import Rede.Acao;
-import Rede.Etapa;
 import Rede.InterfaceNetgames;
-import br.ufsc.inf.leobr.cliente.Jogada;
+import br.ufsc.inf.leobr.cliente.exception.NaoJogandoException;
 
 public class AtorJogador {
 	
@@ -61,25 +58,146 @@ public class AtorJogador {
 		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
 		this.interfaceJogo.informacoes.setNomeJogador(nomeJogadorLocal);
 		this.interfaceJogo.informacoes.setNomeOponente(nomeAdversario);
-		this.interfaceJogo.setFaseDoTurno(posicao == 1 ? Etapa.USO_CARTA_COMECO : Etapa.AGUARDANDO_ADVERSARIO);
-		this.interfaceJogo.setJogadorAtivo(posicao == 1);
-		ControladorDeCartas controlador = this.jogo.getJogadorLocal().getControlador();
-		controlador.inicializar();
-		this.interfaceJogo.atualizarCartas(controlador);
+		this.interfaceJogo.setEtapaDoTurno(posicao == 1 ? Etapa.USO_CARTA_COMECO : Etapa.AGUARDANDO_ADVERSARIO);
+		this.interfaceJogo.atualizarTextos(posicao == 1 ? Respostas.USAR_CARTA : Respostas.AGUARDAR_ADVERSARIO);
+		this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
 		
 	}
 
-	public void receberJogada(Jogada jogada) {
+	public void receberJogada(Acao jogada) {
 		// Implementar recebimento da jogada
 		Acao acao = (Acao) jogada;
-		this.jogo.setTabuleiro(acao.getTabuleiroModificado());
-//		this.interfaceJogo.atualizarInformacoes(acao.getQtdDeck(), acao.getQtdDescarte(), acao.getQtdMao());
+		Respostas r = this.jogo.recebeJogada(jogada);
+		this.interfaceJogo.atualizarTabuleiro(acao.getTabuleiroModificado());
+		
+		if (r == Respostas.VITORIA_DO_OPONENTE) {
+			this.jogo.finalizarJogo();
+
+		} else if (r == Respostas.USAR_CARTA || r == Respostas.SELECIONAR_UMA_PECA_LOCAL) {
+			this.interfaceJogo.atualizarTextos(r);
+			this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
+		}
+		
+		
+		if (jogada.isVitoriaOponente()) {
+			this.interfaceJogo.finalizarJogoComVitoria();
+		}
 	}
 
 	public Respostas cartaClicada(CartaIdentificacao id) {
 		Respostas retorno = this.jogo.cartaClicada(id);
+
 		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
-		this.interfaceJogo.habilitarCartas(false);
+		
+		if (retorno == Respostas.ENVIAR_JOGADA) {
+			Acao jogada = this.jogo.passarEtapa();
+			
+			if (jogada.isVitoriaOponente()) {
+				this.interfaceJogo.finalizarJogoComDerrota();
+			}
+
+			try {
+				this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+				this.ngServer.enviarJogada(jogada);
+			} catch (NaoJogandoException e) {
+				e.printStackTrace();
+			}
+			
+			this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
+			switch (this.jogo.getEtapaAtual()) {
+			case AGUARDANDO_ADVERSARIO:
+				return Respostas.AGUARDAR_ADVERSARIO;
+			case MOVIMENTO:
+				return Respostas.SELECIONAR_UMA_PECA_LOCAL;
+				
+			case USO_CARTA_COMECO:
+				return Respostas.USAR_CARTA;
+				
+			case USO_CARTA_FIM:
+				return Respostas.USAR_CARTA;
+			}
+		}
+		
+		// Atualiza as cartas e tabuleiro do jogador
+		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+		this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
 		return retorno;
+	}
+
+	public Respostas posicaoClicada(int x, int y) {
+		Respostas resposta = this.jogo.posicaoClicada(x, y);
+		this.interfaceJogo.atualizarTextos(resposta);
+		// Criar a jogada para ser enviada
+		if (resposta == Respostas.ENVIAR_JOGADA) {
+			Acao jogada = this.jogo.passarEtapa();
+			try {
+				this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+				this.ngServer.enviarJogada(jogada);
+			} catch (NaoJogandoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+			
+			this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
+			switch (this.jogo.getEtapaAtual()) {
+			case AGUARDANDO_ADVERSARIO:
+				return Respostas.AGUARDAR_ADVERSARIO;
+
+			case MOVIMENTO:
+				return Respostas.SELECIONAR_UMA_PECA_LOCAL;
+				
+			case USO_CARTA_COMECO:
+				return Respostas.USAR_CARTA;
+				
+			case USO_CARTA_FIM:
+				return Respostas.USAR_CARTA;
+			}
+		}
+		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+		return resposta;
+	}
+
+	public Respostas botaoPassarEtapa() {
+		Respostas retorno = null;
+		Acao jogada = this.jogo.botaoPassarEtapa();
+
+		try {
+			// Se o jogador local não estiver em modo de espera, enviar a jogada
+			if (jogada.getEtapa() != Etapa.AGUARDANDO_ADVERSARIO) {
+				this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+				this.ngServer.enviarJogada(jogada);
+			}
+			
+			switch (jogada.getEtapa()) {
+			case AGUARDANDO_ADVERSARIO:
+				// Jogador não devia estar tentando passar etapa.
+				retorno = Respostas.NAO_EH_O_MOMENTO;
+				break;
+			case MOVIMENTO:
+				// Uso carta fim do turno
+				retorno = Respostas.USAR_CARTA;
+				this.interfaceJogo.setEtapaDoTurno(Etapa.USO_CARTA_FIM);
+				break;
+			case USO_CARTA_COMECO:
+				// Hora de movimentar
+				retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL;
+				this.interfaceJogo.setEtapaDoTurno(Etapa.MOVIMENTO);
+				break;
+			case USO_CARTA_FIM:
+				// Turno foi finalizado
+				retorno = Respostas.AGUARDAR_ADVERSARIO;
+				this.interfaceJogo.setEtapaDoTurno(Etapa.AGUARDANDO_ADVERSARIO);
+				break;
+			
+			}
+		} catch (NaoJogandoException e) {
+			e.printStackTrace();
+		}
+		
+		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+		return retorno;
+		
 	}
 }

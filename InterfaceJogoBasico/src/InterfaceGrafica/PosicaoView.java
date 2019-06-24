@@ -15,9 +15,12 @@ public class PosicaoView extends JButton {
 	protected int x;
 	protected int y;
 	protected PecaIdentificacao idPeca;
+	protected ActionListener listener;
 	
 	public PosicaoView(int x, int y, PecaView pecaview, ActionListener action) {
 		super();
+		
+		this.listener = action;
 		
 		this.setBorderPainted(false);
 		
@@ -41,14 +44,4 @@ public class PosicaoView extends JButton {
 			this.setIcon(pecaview.getIcon());
 		}
 	}
-	
-//	@Override
-//	public void setEnabled(boolean b) {
-//		super.setEnabled(b);
-//		if (b) {
-//		this.setBorder(BorderFactory.createLineBorder(new Color(255, 0, 0)));
-//		} else {
-//			this.setBorder(null);
-//		}
-//	}
 }

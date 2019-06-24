@@ -1,10 +1,12 @@
 package DominioDoProblema;
 
 import DominioDoProblema.Pecas.Peca;
+import br.ufsc.inf.leobr.cliente.Jogada;
 
-public class Posicao {
+public class Posicao implements Jogada {
 	protected Peca primeiraPeca;
 	protected Peca segundaPeca;
+	protected boolean habilitada;
 	protected int x;
 	protected int y;
 	
@@ -43,5 +45,47 @@ public class Posicao {
 	
 	public void atualizarSegundaPeca(Peca peca) {
 		this.segundaPeca = peca;
+	}
+
+	public void adicionarNovaPeca(Peca peca) {
+		if (this.primeiraPeca == null) {
+			this.atualizarPrimeiraPeca(peca);
+		} else if (this.segundaPeca == null){
+			this.atualizarSegundaPeca(peca);
+		} else {
+			System.err.println("POSIÇÃO INVÁLIDA PARA POSICIONAMENTO DE PEÇA");
+		}
+	}
+
+	public void anularPrimeiraPeca() {
+		this.primeiraPeca = this.segundaPeca;
+		this.segundaPeca = null;
+	}
+
+	public void anularSegundaPeca() {
+		this.segundaPeca = null;
+	}
+
+	public int pecaEstaNaPosicao(Peca peca) {
+		if (this.primeiraPeca.equals(peca)) {
+			return 1;
+		} else if (this.segundaPeca.equals(peca)) {
+			return 2;
+		} 
+		
+		return 0;
+	}
+
+	public boolean isHabilitada() {
+		return habilitada;
+	}
+
+	public void setHabilitada(boolean habilitada) {
+		this.habilitada = habilitada;
+	}
+	
+	@Override
+	public String toString() {
+		return "[Posição]: Primeira peça = " + this.primeiraPeca + ", Segunda peça = " + this.segundaPeca;
 	}
 }

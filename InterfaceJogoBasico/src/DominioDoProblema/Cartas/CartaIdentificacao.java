@@ -1,15 +1,16 @@
 package DominioDoProblema.Cartas;
 
-public enum CartaIdentificacao {
+import br.ufsc.inf.leobr.cliente.Jogada;
+
+public enum CartaIdentificacao implements Jogada {
 	CORREDORES_EXPERIENTES,
 	ESCUDOS,
-	ESPIAR,
 	MAOS_AO_ALTO,
 	MOVIMENTO_BRUSCO,
-	RECICLAGEM,
 	SACRIFICIO,
 	SAIR_PELA_TANGENTE,
 	SAVE_THE_KING,
 	SILENCIO_POR_FAVOR,
+	NENHUMA,
 }
 

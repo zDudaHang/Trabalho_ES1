@@ -1,8 +1,8 @@
 package DominioDoProblema.Pecas;
 
-public enum PecaIdentificacao {
-	BRANCO,
-	PRETO,
+import br.ufsc.inf.leobr.cliente.Jogada;
+
+public enum PecaIdentificacao implements Jogada {
 	REI_BRANCO,
 	REI_PRETO,
 	BISPO_BRANCO,

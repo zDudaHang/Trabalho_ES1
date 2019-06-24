@@ -1,7 +1,13 @@
 package DominioDoProblema.Cartas;
 
+import java.util.List;
+
+import DominioDoProblema.Etapa;
 import DominioDoProblema.Jogador;
+import DominioDoProblema.Posicao;
+import DominioDoProblema.Tabuleiro;
 import DominioDoProblema.Pecas.Peca;
+import Rede.Acao;
 
 public class MaosAoAlto extends Carta {
 	
@@ -9,13 +15,21 @@ public class MaosAoAlto extends Carta {
 		this.id = CartaIdentificacao.MAOS_AO_ALTO;
 		this.nome = "Mãos ao alto";
 		this.descricao = "Mãos ao alto";
-		this.afetaPecaAdversaria = true;
 	}
 
 	@Override
-	public void aplicarEfeito(Peca pecaLocal, Peca pecaAdversaria, Jogador jogadorLocal, Jogador jogadorAdversario) {
-		// TODO Auto-generated method stub
+	public Acao aplicarEfeito(Tabuleiro tabuleiro, int idAdversario, List<Peca> pecasAfetadas, Posicao posicaoAlvo, Jogador jogadorLocal, Etapa etapa) {
+		assert pecasAfetadas.get(0).getIdJogador() == idAdversario;
 		
+		pecasAfetadas.get(0).setPodeSeMovimentar(false);
+		
+		return new Acao(jogadorLocal.getCartasMao(),
+				jogadorLocal.getCartasDeck(), 
+				jogadorLocal.getCartasDescarte(),
+				this.id, 
+				tabuleiro,
+				etapa,
+				false, false);
 	}
 
 }

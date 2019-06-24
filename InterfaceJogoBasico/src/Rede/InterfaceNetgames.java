@@ -7,6 +7,7 @@ import br.ufsc.inf.leobr.cliente.Proxy;
 import br.ufsc.inf.leobr.cliente.exception.ArquivoMultiplayerException;
 import br.ufsc.inf.leobr.cliente.exception.JahConectadoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoConectadoException;
+import br.ufsc.inf.leobr.cliente.exception.NaoJogandoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoPossivelConectarException;
 
 public class InterfaceNetgames implements OuvidorProxy {
@@ -63,6 +64,10 @@ public class InterfaceNetgames implements OuvidorProxy {
 		}
 		return "Sucesso: solicitacao de inicio enviada a Netgames Server";
 	}
+	
+	public void enviarJogada(Jogada jogada) throws NaoJogandoException {
+		this.proxy.enviaJogada(jogada);
+	}
 
 	@Override
 	public void iniciarNovaPartida(Integer posicao) {
@@ -87,7 +92,8 @@ public class InterfaceNetgames implements OuvidorProxy {
 
 	@Override
 	public void receberJogada(Jogada jogada) {
-		this.atorJogador.receberJogada(jogada);		
+//		System.out.println("[DEBUG] Jogada recebida: " + jogada);
+		this.atorJogador.receberJogada((Acao) jogada);		
 	}
 
 	@Override
