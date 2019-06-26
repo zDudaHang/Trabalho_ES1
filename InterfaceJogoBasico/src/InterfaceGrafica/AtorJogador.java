@@ -66,21 +66,16 @@ public class AtorJogador {
 
 	public void receberJogada(Acao jogada) {
 		// Implementar recebimento da jogada
-		Acao acao = (Acao) jogada;
+		System.out.println(jogada);
 		Respostas r = this.jogo.recebeJogada(jogada);
-		this.interfaceJogo.atualizarTabuleiro(acao.getTabuleiroModificado());
-		
-		if (r == Respostas.VITORIA_DO_OPONENTE) {
+		this.atualizarInterface(jogada);
+		if (jogada.isVitoriaOponente()) {
+			this.interfaceJogo.finalizarJogoComVitoria();
 			this.jogo.finalizarJogo();
 
 		} else if (r == Respostas.USAR_CARTA || r == Respostas.SELECIONAR_UMA_PECA_LOCAL) {
 			this.interfaceJogo.atualizarTextos(r);
 			this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
-		}
-		
-		
-		if (jogada.isVitoriaOponente()) {
-			this.interfaceJogo.finalizarJogoComVitoria();
 		}
 	}
 
@@ -94,34 +89,53 @@ public class AtorJogador {
 			
 			if (jogada.isVitoriaOponente()) {
 				this.interfaceJogo.finalizarJogoComDerrota();
-			}
-
-			try {
-				this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
-				this.ngServer.enviarJogada(jogada);
-			} catch (NaoJogandoException e) {
-				e.printStackTrace();
+				return Respostas.OK;
 			}
 			
-			this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
+			this.enviarJogada(jogada);
+			this.atualizarInterface(jogada);
+			
 			switch (this.jogo.getEtapaAtual()) {
 			case AGUARDANDO_ADVERSARIO:
-				return Respostas.AGUARDAR_ADVERSARIO;
+				retorno = Respostas.AGUARDAR_ADVERSARIO;
 			case MOVIMENTO:
-				return Respostas.SELECIONAR_UMA_PECA_LOCAL;
+				retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL;
 				
 			case USO_CARTA_COMECO:
-				return Respostas.USAR_CARTA;
+				retorno = Respostas.USAR_CARTA;
 				
 			case USO_CARTA_FIM:
-				return Respostas.USAR_CARTA;
+				retorno = Respostas.USAR_CARTA;
 			}
 		}
 		
 		// Atualiza as cartas e tabuleiro do jogador
-		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
-		this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+		this.atualizarInterface(null);
 		return retorno;
+	}
+	
+	public void enviarJogada(Acao jogada) {
+		try {
+			this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+			this.ngServer.enviarJogada(jogada);
+		} catch (NaoJogandoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void atualizarInterface(Acao jogada) {
+		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+		this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
+		this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+		if (jogada != null) {
+			this.interfaceJogo.atualizarNumeroDeCartas(this.jogo.getCartasMaoJogadorLocal(),
+													   this.jogo.getCartasDeckJogadorLocal(),
+													   this.jogo.getCartasDescarteJogadorLocal(),
+													   jogada.getQtdMao(),
+													   jogada.getQtdDeck(),
+													   jogada.getQtdDescarte());
+		}
 	}
 
 	public Respostas posicaoClicada(int x, int y) {
@@ -130,17 +144,9 @@ public class AtorJogador {
 		// Criar a jogada para ser enviada
 		if (resposta == Respostas.ENVIAR_JOGADA) {
 			Acao jogada = this.jogo.passarEtapa();
-			try {
-				this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
-				this.ngServer.enviarJogada(jogada);
-			} catch (NaoJogandoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.enviarJogada(jogada);
+			this.atualizarInterface(jogada);
 			
-			this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
-			
-			this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
 			switch (this.jogo.getEtapaAtual()) {
 			case AGUARDANDO_ADVERSARIO:
 				return Respostas.AGUARDAR_ADVERSARIO;
@@ -155,7 +161,7 @@ public class AtorJogador {
 				return Respostas.USAR_CARTA;
 			}
 		}
-		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+		this.atualizarInterface(null);
 		return resposta;
 	}
 
@@ -163,40 +169,41 @@ public class AtorJogador {
 		Respostas retorno = null;
 		Acao jogada = this.jogo.botaoPassarEtapa();
 
-		try {
-			// Se o jogador local não estiver em modo de espera, enviar a jogada
-			if (jogada.getEtapa() != Etapa.AGUARDANDO_ADVERSARIO) {
-				this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
-				this.ngServer.enviarJogada(jogada);
-			}
+		// Se o jogador local não estiver em modo de espera, enviar a jogada
+		if (jogada.getEtapa() != Etapa.AGUARDANDO_ADVERSARIO) {
+			this.enviarJogada(jogada);
+			this.atualizarInterface(jogada);
 			
-			switch (jogada.getEtapa()) {
-			case AGUARDANDO_ADVERSARIO:
-				// Jogador não devia estar tentando passar etapa.
-				retorno = Respostas.NAO_EH_O_MOMENTO;
-				break;
-			case MOVIMENTO:
-				// Uso carta fim do turno
-				retorno = Respostas.USAR_CARTA;
-				this.interfaceJogo.setEtapaDoTurno(Etapa.USO_CARTA_FIM);
-				break;
-			case USO_CARTA_COMECO:
-				// Hora de movimentar
-				retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL;
-				this.interfaceJogo.setEtapaDoTurno(Etapa.MOVIMENTO);
-				break;
-			case USO_CARTA_FIM:
-				// Turno foi finalizado
-				retorno = Respostas.AGUARDAR_ADVERSARIO;
-				this.interfaceJogo.setEtapaDoTurno(Etapa.AGUARDANDO_ADVERSARIO);
-				break;
-			
+			if (jogada.isVitoriaOponente()) {
+				this.interfaceJogo.finalizarJogoComDerrota();
+				return Respostas.OK;
 			}
-		} catch (NaoJogandoException e) {
-			e.printStackTrace();
 		}
 		
-		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
+		switch (jogada.getEtapa()) {
+		case AGUARDANDO_ADVERSARIO:
+			// Jogador não devia estar tentando passar etapa.
+			retorno = Respostas.NAO_EH_O_MOMENTO;
+			break;
+		case MOVIMENTO:
+			// Uso carta fim do turno
+			retorno = Respostas.USAR_CARTA;
+			this.interfaceJogo.setEtapaDoTurno(Etapa.USO_CARTA_FIM);
+			break;
+		case USO_CARTA_COMECO:
+			// Hora de movimentar
+			retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL;
+			this.interfaceJogo.setEtapaDoTurno(Etapa.MOVIMENTO);
+			break;
+		case USO_CARTA_FIM:
+			// Turno foi finalizado
+			retorno = Respostas.AGUARDAR_ADVERSARIO;
+			this.interfaceJogo.setEtapaDoTurno(Etapa.AGUARDANDO_ADVERSARIO);
+			break;
+		
+		}
+		
+		this.atualizarInterface(jogada);
 		return retorno;
 		
 	}

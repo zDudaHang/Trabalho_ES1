@@ -67,9 +67,9 @@ public class Posicao implements Jogada {
 	}
 
 	public int pecaEstaNaPosicao(Peca peca) {
-		if (this.primeiraPeca.equals(peca)) {
+		if (peca.equals(this.primeiraPeca)) {
 			return 1;
-		} else if (this.segundaPeca.equals(peca)) {
+		} else if (peca.equals(this.segundaPeca)) {
 			return 2;
 		} 
 		
@@ -87,5 +87,9 @@ public class Posicao implements Jogada {
 	@Override
 	public String toString() {
 		return "[Posição]: Primeira peça = " + this.primeiraPeca + ", Segunda peça = " + this.segundaPeca;
+	}
+
+	public Peca pegarSegundaPeca() {
+		return this.segundaPeca;
 	}
 }

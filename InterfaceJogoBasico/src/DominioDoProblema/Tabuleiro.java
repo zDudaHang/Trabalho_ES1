@@ -1,8 +1,6 @@
 package DominioDoProblema;
 
 
-import java.util.logging.Logger;
-
 import DominioDoProblema.Pecas.Bispo;
 import DominioDoProblema.Pecas.Peca;
 import DominioDoProblema.Pecas.PecaIdentificacao;
@@ -11,6 +9,7 @@ import DominioDoProblema.Pecas.Torre;
 import br.ufsc.inf.leobr.cliente.Jogada;
 
 public class Tabuleiro implements Jogada {
+	static final long serialVersionUID = -2779590008249537075L;
 	protected Posicao[][] posicoes;
 
 	public Tabuleiro() {
@@ -139,41 +138,48 @@ public class Tabuleiro implements Jogada {
 		posicao.anularSegundaPeca();
 	}
 
-	public void habilitarMovimentoBrusco(int x, int y) {
+	public void habilitarMovimentoBrusco(int x, int y, int idJogadorLocal) {
 		int nx, ny;
 		
 		// Lateral direita
 		nx = x+1;
 		ny = y;
-		if(nx <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(nx <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}
 		
 		// Lateral esquerda
 		nx = x-1;
 		ny = y;
-		if(nx >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(nx >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}
 		
 		// Em cima
 		nx = x;
 		ny = y-1;
-		if(ny >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(ny >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}
 		
 		// Em baixo
 		nx = x;
 		ny = y+1;
-		if(ny <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(ny <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}
 		
 	}
 	
-	private boolean posicaoPodeReceberPeca(int nx, int ny) {
-		return this.pegarPecasDaPosicao(nx, ny)[1] == null;
+	private boolean posicaoPodeReceberPeca(int nx, int ny, int idJogadorLocal) {
+		Peca[] pecas = this.pegarPecasDaPosicao(nx, ny);
+		
+		boolean idValido = true;
+		if (pecas[0] != null) {
+			idValido = pecas[0].getIdJogador() != idJogadorLocal;
+		}
+
+		return (pecas[0] == null || idValido) && pecas[1] == null;
 	}
 
 	public void desabilitarTodasAsCasas() {
@@ -184,34 +190,34 @@ public class Tabuleiro implements Jogada {
 		}
 	}
 
-	public void habilitarSairPelaTangente(int x, int y) {
+	public void habilitarSairPelaTangente(int x, int y, int idJogadorLocal) {
 		int nx, ny;
 		
 		// Pra cima, direita
 		nx = x+1;
 		ny = y-1;
-		if(nx <= 7 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(nx <= 7 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}
 		
 		// Pra cima, esquerda
 		nx = x-1;
 		ny = y-1;
-		if(nx >= 0 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(nx >= 0 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}
 		
 		//Em baixo, esquerda
 		nx = x-1;
 		ny = y+1;
-		if(nx >= 0 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(nx >= 0 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}
 		
 		// Em baixo, direita
 		nx = x+1;
 		ny = y+1;
-		if(nx <= 7 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+		if(nx <= 7 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 			this.pegarPosicao(nx, ny).setHabilitada(true);
 		}	
 	}
@@ -280,84 +286,85 @@ public class Tabuleiro implements Jogada {
 	public void habilitarEtapaDeMovimento(int idJogador) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				Peca peca = this.pegarPosicao(i,j).pegarPrimeiraPeca();
-				
-				if (peca != null && 
-					peca.getIdJogador() == idJogador &&
-					peca.isPodeSeMovimentar()) {
+				Posicao pos = this.pegarPosicao(i,j); 
+				Peca peca1 = pos.pegarPrimeiraPeca();
+
+				if (peca1 != null && 
+					peca1.getIdJogador() == idJogador &&
+					peca1.isPodeSeMovimentar()) {
 					this.posicoes[i][j].setHabilitada(true);
 				}
 			}
 		}
 	}
 
-	public void habilitarMovimentoBispo(int numeroDeCasas, int x, int y) {
+	public void habilitarMovimentoBispo(int numeroDeCasas, int x, int y, int idJogadorLocal) {
 		for (int i = 0; i < numeroDeCasas; i++) {
 			int nx, ny;
 			// Pra cima, direita
 			nx = x+1+i;
 			ny = y-1-i;
-			if(nx <= 7 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(nx <= 7 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 			
 			// Pra cima, esquerda
 			nx = x-1-i;
 			ny = y-1-i;
-			if(nx >= 0 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(nx >= 0 && ny >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 			
 			//Em baixo, esquerda
 			nx = x-1-i;
 			ny = y+1+i;
-			if(nx >= 0 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(nx >= 0 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 			
 			// Em baixo, direita
 			nx = x+1+i;
 			ny = y+1+i;
-			if(nx <= 7 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(nx <= 7 && ny <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 		}
 	}
 
-	public void habilitarMovimentoRei(int numeroDeCasas, int x, int y) {
-		this.habilitarMovimentoBispo(numeroDeCasas, x, y);
-		this.habilitarMovimentoTorre(numeroDeCasas, x, y);
+	public void habilitarMovimentoRei(int numeroDeCasas, int x, int y, int idJogadorLocal) {
+		this.habilitarMovimentoBispo(numeroDeCasas, x, y, idJogadorLocal);
+		this.habilitarMovimentoTorre(numeroDeCasas, x, y, idJogadorLocal);
 	}
 
-	public void habilitarMovimentoTorre(int numeroDeCasas, int x, int y) {
+	public void habilitarMovimentoTorre(int numeroDeCasas, int x, int y, int idJogadorLocal) {
 		for (int i = 0; i < numeroDeCasas; i++) {
 			int nx, ny;
 			
 			// Lateral direita
 			nx = x+1+i;
 			ny = y;
-			if(nx <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(nx <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 			
 			// Lateral esquerda
 			nx = x-1-i;
 			ny = y;
-			if(nx >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(nx >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 			
 			// Em cima
 			nx = x;
 			ny = y-1-i;
-			if(ny >= 0 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(ny >= 0 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 			
 			// Em baixo
 			nx = x;
 			ny = y+1+i;
-			if(ny <= 7 && this.posicaoPodeReceberPeca(nx, ny)) {
+			if(ny <= 7 && this.posicaoPodeReceberPeca(nx, ny, idJogadorLocal)) {
 				this.pegarPosicao(nx, ny).setHabilitada(true);
 			}
 		}
@@ -397,19 +404,13 @@ public class Tabuleiro implements Jogada {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				Peca[] pecas = this.pegarPecasDaPosicao(x, y);
-				// Evita remoção de peças do mesmo jogador
-				if (pecas[0] != null && pecas[1] != null) {
-					if (pecas[0].getIdJogador() == pecas[1].getIdJogador()) {
-						continue;
-					}
-				}
 					
 				if (pecas[1] != null) {
 					this.pegarPosicao(x, y).atualizarPrimeiraPeca(pecas[1]);
 					this.setSegundaPecaPosicaoNull(x, y);
 					
 					if (pecas[0].getId() == PecaIdentificacao.REI_BRANCO ||
-							pecas[0].getId() == PecaIdentificacao.REI_PRETO) {
+						pecas[0].getId() == PecaIdentificacao.REI_PRETO) {
 						retorno = Respostas.VITORIA_DO_OPONENTE;
 					}
 				}
@@ -430,5 +431,32 @@ public class Tabuleiro implements Jogada {
 				}
 			}
 		}
+	}
+
+	public Peca pegarReidoJogador(int idJogador) {
+		Peca retorno = null;
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				Peca[] pecas = this.pegarPecasDaPosicao(x, y);
+				if (pecas[0] != null) {
+					if ( pecas[0].getIdJogador() == idJogador &&
+						(pecas[0].getId() == PecaIdentificacao.REI_BRANCO ||
+						 pecas[0].getId() == PecaIdentificacao.REI_PRETO)) {
+						retorno = pecas[0];
+					}
+				}
+				
+				if (pecas[1] != null) {
+					if ( pecas[1].getIdJogador() == idJogador &&
+						(pecas[1].getId() == PecaIdentificacao.REI_BRANCO ||
+						 pecas[1].getId() == PecaIdentificacao.REI_PRETO)) {
+						retorno = pecas[1];
+					}
+				}
+				
+			}
+		}
+		
+		return retorno;
 	}
 }

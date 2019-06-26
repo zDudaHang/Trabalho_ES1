@@ -78,7 +78,7 @@ public class ControladorDeCartas {
 		return null;
 	}
 	public boolean comprarCarta() {
-		if (this.getTamanhoDescarte() > 0) {
+		if (this.getTamanhoDeck() > 0) {
 			Random random = new Random();
 			int indice = random.nextInt(this.deck.size());
 			Carta c = deck.remove(indice);

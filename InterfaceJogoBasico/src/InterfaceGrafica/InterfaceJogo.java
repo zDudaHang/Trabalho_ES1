@@ -284,4 +284,14 @@ public class InterfaceJogo {
 		JOptionPane.showMessageDialog(frame, "Jogo finalizado! Você venceu!");
 		this.initialize();
 	}
+
+	public void atualizarNumeroDeCartas(int cartasMaoJogadorLocal, int cartasDeckJogadorLocal,
+			int cartasDescarteJogadorLocal, int cartasMaoAdversario, int cartasDeckAdversario, int cartasDescarteAdversario) {
+		this.informacoes.atualizarNumeroDeCartas(cartasMaoJogadorLocal,
+												 cartasDeckJogadorLocal,
+												 cartasDescarteJogadorLocal,
+												 cartasMaoAdversario, 
+												 cartasDeckAdversario, 
+												 cartasDescarteAdversario);	
+	}
 }

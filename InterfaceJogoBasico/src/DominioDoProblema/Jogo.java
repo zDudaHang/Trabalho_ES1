@@ -99,17 +99,13 @@ public class Jogo {
 			}
 		}
 		
-		if (this.jogadorLocal.isPodeUsarCarta()) {
-			this.setEtapaAtual(Etapa.USO_CARTA_COMECO);
-			this.setEstadoAtual(EstadoJogo.AGUARDANDO_USO_CARTA);	
-			return Respostas.USAR_CARTA;
-
-		} else {
-			this.setEtapaAtual(Etapa.MOVIMENTO);
-			this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_MOVIMENTO);
-			this.tabuleiro.habilitarPecasLocais(this.jogadorLocal.getIdJogador());
-			return Respostas.SELECIONAR_UMA_PECA_LOCAL;
+		this.setEtapaAtual(Etapa.USO_CARTA_COMECO);
+		this.setEstadoAtual(EstadoJogo.AGUARDANDO_USO_CARTA);	
+	
+		if (!this.jogadorLocal.isPodeUsarCarta()) {
+			return Respostas.ENVIAR_JOGADA;
 		}
+		return Respostas.USAR_CARTA;
 	}
 	
 	private Respostas setupMovimento() {
@@ -214,7 +210,7 @@ public class Jogo {
 			break;
 		
 		case SAVE_THE_KING:
-			this.setEstadoAtual(EstadoJogo.AGUARDNADO_SELECIONAR_PECA_LOCAL);
+			this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_LOCAL_NAO_REI);
 			this.tabuleiro.habilitarPecasLocaisNaoRei(this.jogadorLocal.getIdJogador());
 			retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL_NAO_REI;
 			break;
@@ -270,18 +266,16 @@ public class Jogo {
 			break;
 
 		case USO_CARTA_COMECO:
-			r = this.executaEtapaDano();
-			// Se ao executar o dano, o jogo definir que o oponente venceu
-			// Finalizar o jogo localmente e enviar jogada para oponente finalizar 
-			// o jogo também
-			if (r == Respostas.VITORIA_DO_OPONENTE) {
-				return this.finalizarJogo();
-			}
-
 			if (this.getEstadoAtual() != EstadoJogo.ENVIANDO_JOGADA) {
 				this.cartaUsada = CartaIdentificacao.NENHUMA;
 			}
 			retorno = this.criarAcaoUsoDeCarta();
+			r = this.executaEtapaDano();
+	
+			if (r == Respostas.VITORIA_DO_OPONENTE) {
+				return this.finalizarJogo();
+			}
+
 			this.setupMovimento();
 			break;
 
@@ -322,7 +316,7 @@ public class Jogo {
 		// TODO Executa finalização do jogo
 		this.partidaAndamento = false;
 		
-		return new Acao(0, 0, 0, null, null, null, false, true);
+		return new Acao(0, 0, 0, null, this.getTabuleiro(), null, false, true);
 	}
 
 	private Acao criarAcaoUsoDeCarta() {
@@ -371,15 +365,15 @@ public class Jogo {
 			switch(peca.getId()) {
 			case BISPO_BRANCO:
 			case BISPO_PRETO:
-				this.tabuleiro.habilitarMovimentoBispo(peca.getNumeroDeCasas(), x, y);
+				this.tabuleiro.habilitarMovimentoBispo(peca.getNumeroDeCasas(), x, y, this.jogadorLocal.getIdJogador());
 				break;
 			case REI_BRANCO:
 			case REI_PRETO:
-				this.tabuleiro.habilitarMovimentoRei(peca.getNumeroDeCasas(), x, y);
+				this.tabuleiro.habilitarMovimentoRei(peca.getNumeroDeCasas(), x, y, this.jogadorLocal.getIdJogador());
 				break;
 			case TORRE_BRANCA:
 			case TORRE_PRETA:
-				this.tabuleiro.habilitarMovimentoTorre(peca.getNumeroDeCasas(), x, y);
+				this.tabuleiro.habilitarMovimentoTorre(peca.getNumeroDeCasas(), x, y, this.jogadorLocal.getIdJogador());
 				break;			
 			}
 			
@@ -419,19 +413,19 @@ public class Jogo {
 
 			case MOVIMENTO_BRUSCO:
 				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
-				this.tabuleiro.habilitarMovimentoBrusco(x, y);
+				this.tabuleiro.habilitarMovimentoBrusco(x, y, this.jogadorLocal.getIdJogador());
 				this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_POSICAO);
 				return Respostas.SELECIONAR_POSICAO;
 
 			case SAIR_PELA_TANGENTE:
 				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
-				this.tabuleiro.habilitarSairPelaTangente(x, y);
+				this.tabuleiro.habilitarSairPelaTangente(x, y, this.jogadorLocal.getIdJogador());
 				this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_POSICAO);
 				return Respostas.SELECIONAR_POSICAO;
 
+			case SACRIFICIO:				
 			case ESCUDOS:
 			case MAOS_AO_ALTO:
-			case SACRIFICIO:
 			case SILENCIO_POR_FAVOR:
 			case NENHUMA:
 				this.setEstadoAtual(EstadoJogo.ENVIANDO_JOGADA);
@@ -449,13 +443,16 @@ public class Jogo {
 		case AGUARDANDO_SELECIONAR_PECA_LOCAL_NAO_REI:
 			switch (this.cartaUsada) {
 			case SAVE_THE_KING:
+				this.pecasSelecionadas.add(this.pegarReiDoJogador(this.jogadorLocal.getIdJogador()));
 				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
 				this.setEstadoAtual(EstadoJogo.ENVIANDO_JOGADA);
 				return Respostas.ENVIAR_JOGADA;
 
 			case SACRIFICIO:
 				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
-				return Respostas.SELECIONAR_UMA_PECA_ADVERSARIA_NAO_REI;
+				this.tabuleiro.habilitarPecasAdversariasNaoRei(this.jogadorLocal.getIdJogador());
+				this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_ADVERSARIA_NAO_REI);
+				return Respostas.SELECIONAR_POSICAO;
 
 			case CORREDORES_EXPERIENTES:
 			case ESCUDOS:
@@ -499,7 +496,7 @@ public class Jogo {
 			
 			if (this.getEstadoAtual() == EstadoJogo.AGUARDANDO_USO_CARTA) {
 				return Respostas.USAR_CARTA;
-			} else {
+			} else { // Etapa de movimento
 				return Respostas.SELECIONAR_UMA_PECA_LOCAL;
 			}
 		}
@@ -521,5 +518,21 @@ public class Jogo {
 
 	public void setEstadoAtual(EstadoJogo estadoAtual) {
 		this.estadoAtual = estadoAtual;
+	}
+	
+	public Peca pegarReiDoJogador(int idJogador) {
+		return this.tabuleiro.pegarReidoJogador(idJogador);
+	}
+
+	public int getCartasDeckJogadorLocal() {
+		return this.jogadorLocal.getCartasDeck();
+	}
+
+	public int getCartasDescarteJogadorLocal() {
+		return this.jogadorLocal.getCartasDescarte();
+	}
+
+	public int getCartasMaoJogadorLocal() {
+		return this.jogadorLocal.getCartasMao();
 	}
 }

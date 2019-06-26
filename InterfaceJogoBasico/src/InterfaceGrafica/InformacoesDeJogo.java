@@ -101,4 +101,18 @@ public class InformacoesDeJogo extends PanelArredondado {
 	public void setFaseDoTurno(String faseDoTurno) {
 		this.faseDoTurno.setText(faseDoTurno);
 	}
+
+	public void atualizarNumeroDeCartas(int cartasMaoJogadorLocal, int cartasDeckJogadorLocal,
+			int cartasDescarteJogadorLocal, int cartasMaoAdversario, int cartasDeckAdversario,
+			int cartasDescarteAdversario) {
+		
+		this.jogador.setCartasDeck(cartasDeckJogadorLocal);
+		this.oponente.setCartasDeck(cartasDeckAdversario);
+		
+		this.jogador.setCartasMao(cartasMaoJogadorLocal);
+		this.oponente.setCartasMao(cartasMaoAdversario);
+		
+		this.jogador.setCartasDescarte(cartasDescarteJogadorLocal);
+		this.oponente.setCartasDescarte(cartasDescarteAdversario);
+	}
 }

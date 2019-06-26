@@ -130,7 +130,7 @@ public class Jogador {
 	}
 
 	public boolean estaNoEstadoDeCompra() {
-		return this.getCartasDescarte() >= 5;
+		return this.getCartasMao() == 0 || this.getCartasDeck() < 5;
 	}
 
 	public boolean comprarCarta() {
