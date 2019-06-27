@@ -21,12 +21,15 @@ public class CartaView extends JLabel {
 
 		// TODO
 		URL url = getClass().getResource("/backcard.png");
-		this.setToolTipText("This is a default card, for testing purposes. If you use this card, not will actually happen.");
 		ImageIcon  img = new ImageIcon(url);
 		this.setIcon(img);
 		
 	}
 	protected void usarCarta(CartaIdentificacao id) {
+	}
+	
+	protected void setDescricao(String descricao) {
+		this.setToolTipText(descricao);
 	}
 	
 	public void setId(CartaIdentificacao id) {
@@ -91,5 +94,10 @@ public class CartaView extends JLabel {
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void setToolTipText(String text) {
+		super.setToolTipText("<html><p width=\"200\">" +text+"</p></html>");
 	}
 }

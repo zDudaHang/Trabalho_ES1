@@ -60,7 +60,7 @@ public class AtorJogador {
 		this.interfaceJogo.informacoes.setNomeOponente(nomeAdversario);
 		this.interfaceJogo.setEtapaDoTurno(posicao == 1 ? Etapa.USO_CARTA_COMECO : Etapa.AGUARDANDO_ADVERSARIO);
 		this.interfaceJogo.atualizarTextos(posicao == 1 ? Respostas.USAR_CARTA : Respostas.AGUARDAR_ADVERSARIO);
-		this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+		this.atualizarInterface(null);
 		
 	}
 
@@ -128,6 +128,7 @@ public class AtorJogador {
 		this.interfaceJogo.atualizarTabuleiro(this.jogo.getTabuleiro());
 		this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
 		this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
+		this.interfaceJogo.atualizarTextosDasCartas(this.jogo.getDescricaoCartasDaMao());
 		if (jogada != null) {
 			this.interfaceJogo.atualizarNumeroDeCartas(this.jogo.getCartasMaoJogadorLocal(),
 													   this.jogo.getCartasDeckJogadorLocal(),

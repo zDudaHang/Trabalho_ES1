@@ -14,7 +14,7 @@ public class MaosAoAlto extends Carta {
 	public MaosAoAlto () {
 		this.id = CartaIdentificacao.MAOS_AO_ALTO;
 		this.nome = "Mãos ao alto";
-		this.descricao = "Mãos ao alto";
+		this.descricao = "Durante o próximo turno, uma peça não pode se mover de nenhuma forma.";
 	}
 
 	@Override

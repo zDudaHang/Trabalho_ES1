@@ -53,4 +53,17 @@ public class InformacoesDeCartas extends PanelArredondado {
 			this.mao.get(i).atualizarIcon();
 		}
 	}
+
+	public void atualizarTextosDasCartas(String[] descricaoCartasDaMao) {
+		int tamanhoMao = descricaoCartasDaMao.length;
+		// Atualiza icon das cartas na mão
+		for(int i = 0; i < tamanhoMao; i++) {
+			this.mao.get(i).setDescricao(descricaoCartasDaMao[i]);
+		}
+		
+		// Atualiza icon das cartas na mão restantes até a quinta
+		for(int i = tamanhoMao; i < 5; i++) {
+			this.mao.get(i).setDescricao("");
+		}
+	}
 }

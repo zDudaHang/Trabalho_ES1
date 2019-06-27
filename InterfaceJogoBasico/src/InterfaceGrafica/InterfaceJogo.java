@@ -223,7 +223,7 @@ public class InterfaceJogo {
 	}
 
 	public void atualizarCartas(CartaIdentificacao[] cartas) {
-		this.jogador.info.atualizarMao(cartas);
+		this.jogador.atualizarMao(cartas);
 		this.informacoes.getJogador().setCartasMao(cartas.length);
 	}
 
@@ -293,5 +293,9 @@ public class InterfaceJogo {
 												 cartasMaoAdversario, 
 												 cartasDeckAdversario, 
 												 cartasDescarteAdversario);	
+	}
+
+	public void atualizarTextosDasCartas(String[] descricaoCartasDaMao) {
+		this.jogador.atualizarTextosDasCartas(descricaoCartasDaMao);
 	}
 }

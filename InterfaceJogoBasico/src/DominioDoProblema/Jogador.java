@@ -140,4 +140,8 @@ public class Jogador {
 	public CartaIdentificacao[] idCartasMao() {
 		return this.controlador.idCartasMao();
 	}
+
+	public String[] getDescricaoCartasDaMao() {
+		return this.controlador.getDescricaoCartasDaMao();
+	}
 }

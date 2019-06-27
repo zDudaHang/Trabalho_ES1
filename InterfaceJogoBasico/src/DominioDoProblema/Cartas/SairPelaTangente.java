@@ -13,7 +13,8 @@ public class SairPelaTangente extends Carta {
 	public SairPelaTangente() {
 		this.id = CartaIdentificacao.SAIR_PELA_TANGENTE;
 		this.nome = "Sair pela Tangente";
-		this.descricao = "Sair pela Tangente";
+		this.descricao = "Movimentar qualquer peça 1 casa na diagonal. " + 
+				"Não surte efeito quando a peça foi afetada pela carta \"Mãos ao alto!\"";
 	}
 	
 	@Override

@@ -535,4 +535,8 @@ public class Jogo {
 	public int getCartasMaoJogadorLocal() {
 		return this.jogadorLocal.getCartasMao();
 	}
+
+	public String[] getDescricaoCartasDaMao() {
+		return this.jogadorLocal.getDescricaoCartasDaMao();
+	}
 }

@@ -14,7 +14,8 @@ public class MovimentoBrusco extends Carta{
 	public MovimentoBrusco() {
 		this.id = CartaIdentificacao.MOVIMENTO_BRUSCO;
 		this.nome = "Movimento brusco";
-		this.descricao = "Movimento brusco";
+		this.descricao = "Movimentar qualquer peça 1 casa em cruz (adjacentes). " + 
+				"Não surte efeito quando a peça foi afetada pela carta \"Mãos ao alto!\"";
 	}
 
 	@Override

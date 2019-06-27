@@ -13,7 +13,7 @@ public class SacrificioNecessario extends Carta {
 	public SacrificioNecessario() {
 		this.id = CartaIdentificacao.SACRIFICIO;
 		this.nome = "Sacrifício Necessário";
-		this.descricao = "Sacrifício Necessário";
+		this.descricao = "Sacrifique uma peça para destruir uma peça que não seja um rei";
 	}
 	
 	@Override

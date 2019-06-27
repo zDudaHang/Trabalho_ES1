@@ -97,4 +97,12 @@ public class ControladorDeCartas {
 		
 		return cartas;
 	}
+	public String[] getDescricaoCartasDaMao() {
+		String[] retorno = new String[this.getTamanhoMao()];
+		for (int i = 0; i < this.getTamanhoMao(); i++) {
+			retorno[i] = this.mao.get(i).getDescricao();
+		}
+		
+		return retorno;
+	}
 }
