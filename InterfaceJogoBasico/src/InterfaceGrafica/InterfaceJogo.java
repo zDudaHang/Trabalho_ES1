@@ -113,7 +113,7 @@ public class InterfaceJogo {
 		ActionListener tabuleiroHandler = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				if(atorJogador.jogo.getJogadorLocal().isJogadorDaVez()) {
+				if(atorJogador.jogo.getJogadorLocal().ehJogadorDaVez()) {
 					PosicaoView pView = (PosicaoView)e.getSource();
 					
 					Respostas r = atorJogador.posicaoClicada(pView.x, pView.y);
@@ -133,7 +133,7 @@ public class InterfaceJogo {
 		ActionListener botaoPassarEtapaListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (atorJogador.jogo.getJogadorLocal().isJogadorDaVez()) {
+				if (atorJogador.jogo.getJogadorLocal().ehJogadorDaVez()) {
 					Respostas r = atorJogador.botaoPassarEtapa();
 					atualizarTextos(r);
 				}

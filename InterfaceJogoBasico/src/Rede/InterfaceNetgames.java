@@ -92,7 +92,6 @@ public class InterfaceNetgames implements OuvidorProxy {
 
 	@Override
 	public void receberJogada(Jogada jogada) {
-//		System.out.println("[DEBUG] Jogada recebida: " + jogada);
 		this.atorJogador.receberJogada((Acao) jogada);		
 	}
 

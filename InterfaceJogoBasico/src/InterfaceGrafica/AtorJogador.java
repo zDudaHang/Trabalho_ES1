@@ -21,7 +21,7 @@ public class AtorJogador {
 	}
 
 	public String conectar(String string, String string2) {
-		String mensagem = "Condicao para conexao nao atendida (defina qual)";
+		String mensagem = "Você já está conectado!";
 		boolean permitido = jogo.permitidoConectar();
 		if (permitido) {
 			mensagem = ngServer.conectar(string, string2);
@@ -33,7 +33,7 @@ public class AtorJogador {
 	}
 	
 	public String desconectar() {
-		String mensagem = "Condicao para desconexao nao atendida (defina qual)";
+		String mensagem = "Você não está conectado!";
 		boolean permitido = jogo.permitidoDesconectar();
 		if (permitido) {
 			mensagem = ngServer.desconectar();
@@ -45,7 +45,7 @@ public class AtorJogador {
 	}
 	
 	public String iniciarPartida() {
-		String mensagem = "Condicao para iniciar partida nao atendida (defina qual)";
+		String mensagem = "Você já está jogando!";
 		boolean permitido = jogo.permitidoIniciarPartida();
 		if (permitido) {
 			mensagem = ngServer.iniciarPartida();
@@ -65,7 +65,6 @@ public class AtorJogador {
 	}
 
 	public void receberJogada(Acao jogada) {
-		// Implementar recebimento da jogada
 		System.out.println(jogada);
 		Respostas r = this.jogo.recebeJogada(jogada);
 		this.atualizarInterface(jogada);

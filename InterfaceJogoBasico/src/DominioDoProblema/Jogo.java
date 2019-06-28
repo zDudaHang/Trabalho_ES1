@@ -10,9 +10,8 @@ import Rede.Acao;
 
 public class Jogo {
 	
-	protected boolean conectado = false;
-	protected boolean partidaAndamento = false;
-	
+	protected boolean conectado;
+	protected boolean partidaAndamento;	
 	protected Jogador jogadorLocal;
 	protected Tabuleiro tabuleiro;
 	protected Etapa etapaAtual;
@@ -26,6 +25,9 @@ public class Jogo {
 		this.pecasSelecionadas = new ArrayList<>();
 		this.cartaUsada = CartaIdentificacao.NENHUMA;
 		this.posicaoSelecionada = null;
+		
+		this.conectado = false;
+		this.partidaAndamento = false;
 	}
 
 	public void definirConectado(boolean valor) {
@@ -46,26 +48,23 @@ public class Jogo {
 	
 	public boolean permitidoConectar() {
 		return !conectado;
-		// defina a l�gica do seu jogo
 	}
 	
 	public boolean permitidoDesconectar() {
 		return conectado;
-		// defina a l�gica do seu jogo
 	}
 
 	public boolean permitidoIniciarPartida() {
 		return !partidaAndamento;
-		// defina a l�gica do seu jogo
 	}
 
-	public void iniciarNovaPartida(Integer posicao, String nomeAdversario, String nomeJogadorLocal) {
+	public void iniciarNovaPartida(Integer idJogadorLocal, String nomeAdversario, String nomeJogadorLocal) {
 		this.tabuleiro = new Tabuleiro();
-		this.tabuleiro.configurarTabuleiro(posicao == 1, posicao);
+		this.tabuleiro.configurarTabuleiro(idJogadorLocal == 1, idJogadorLocal);
 		
-		this.jogadorLocal = new Jogador(posicao == 1, nomeJogadorLocal);
+		this.jogadorLocal = new Jogador(idJogadorLocal == 1, nomeJogadorLocal);
 		
-		if (posicao == 1) {
+		if (idJogadorLocal == 1) {
 			this.setupInicioTurno();
 		} else {
 			this.setupEspera();
@@ -75,22 +74,21 @@ public class Jogo {
 	private Respostas setupEspera() {
 		this.setEtapaAtual(Etapa.AGUARDANDO_ADVERSARIO);
 		this.setEstadoAtual(EstadoJogo.AGUARDANDO_ADVERSARIO);
-		this.jogadorLocal.setEhJogadorDaVez(false);
+		this.jogadorLocal.setJogadorDaVez(false);
 		this.jogadorLocal.setPodeLevarDano(true);
-		this.jogadorLocal.setUsouCarta(false);
 		this.jogadorLocal.setPodeUsarCarta(true);
 		this.tabuleiro.resetPecasJogador(this.jogadorLocal.getIdJogador());
 		this.pecasSelecionadas = new ArrayList<>();
 		this.cartaUsada = CartaIdentificacao.NENHUMA;
 		this.jogadorLocal.setPodeUsarCarta(true);
-		this.jogadorLocal.setEhJogadorDaVez(false);
+		this.jogadorLocal.setJogadorDaVez(false);
 		
 		return Respostas.OK;
 	}
 
 	private Respostas setupInicioTurno() {
 		// Checa se o jogador tem que comprar carta
-		this.jogadorLocal.setEhJogadorDaVez(true);
+		this.jogadorLocal.setJogadorDaVez(true);
 
 		if (this.jogadorLocal.estaNoEstadoDeCompra()) {
 			boolean conseguiu = this.jogadorLocal.comprarCarta();
@@ -102,7 +100,7 @@ public class Jogo {
 		this.setEtapaAtual(Etapa.USO_CARTA_COMECO);
 		this.setEstadoAtual(EstadoJogo.AGUARDANDO_USO_CARTA);	
 	
-		if (!this.jogadorLocal.isPodeUsarCarta()) {
+		if (!this.jogadorLocal.podeUsarCarta()) {
 			return Respostas.ENVIAR_JOGADA;
 		}
 		return Respostas.USAR_CARTA;
@@ -123,9 +121,7 @@ public class Jogo {
 	
 	private Respostas executaEtapaDano() {
 		Respostas retorno = Respostas.OK;
-		// TODO fazer algoritmo para executar o dano, retornar
-		// vitoria para o oponente caso o rei local for removido
-		if (this.jogadorLocal.isPodeLevarDano()) {
+		if (this.jogadorLocal.podeLevarDano()) {
 			retorno = this.tabuleiro.executarDano();
 
 		} else {
@@ -137,7 +133,7 @@ public class Jogo {
 	}
 	
 	private Respostas setupFimTurno() {
-		if (this.jogadorLocal.isPodeUsarCarta()) {
+		if (this.jogadorLocal.podeUsarCarta()) {
 			this.setEtapaAtual(Etapa.USO_CARTA_FIM);
 			this.setEstadoAtual(EstadoJogo.AGUARDANDO_USO_CARTA);
 			
@@ -158,20 +154,8 @@ public class Jogo {
 		this.conectado = conectado;
 	}
 
-	public boolean isPartidaAndamento() {
-		return partidaAndamento;
-	}
-
-	public void setPartidaAndamento(boolean partidaAndamento) {
-		this.partidaAndamento = partidaAndamento;
-	}
-
 	public Jogador getJogadorLocal() {
 		return jogadorLocal;
-	}
-
-	public void setJogadorLocal(Jogador jogadorLocal) {
-		this.jogadorLocal = jogadorLocal;
 	}
 
 	public Tabuleiro getTabuleiro() {
@@ -313,7 +297,6 @@ public class Jogo {
 	}
 
 	public Acao finalizarJogo() {
-		// TODO Executa finalização do jogo
 		this.partidaAndamento = false;
 		
 		return new Acao(0, 0, 0, null, this.getTabuleiro(), null, false, true);
@@ -487,8 +470,6 @@ public class Jogo {
 			this.jogadorLocal.setPodeUsarCarta(false);
 		}
 
-		// TODO interpretar cada etapa
-		
 		// Caso seja o fim do turno do oponente, inicia o turno do
 		// jogador local
 		if (jogada.getEtapa() == Etapa.USO_CARTA_FIM) {
@@ -521,7 +502,7 @@ public class Jogo {
 	}
 	
 	public Peca pegarReiDoJogador(int idJogador) {
-		return this.tabuleiro.pegarReidoJogador(idJogador);
+		return this.tabuleiro.pegarReiDoJogador(idJogador);
 	}
 
 	public int getCartasDeckJogadorLocal() {

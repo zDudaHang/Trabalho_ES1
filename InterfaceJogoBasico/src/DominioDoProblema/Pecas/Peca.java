@@ -4,6 +4,8 @@ import DominioDoProblema.Pecas.EstadoPeca;
 import br.ufsc.inf.leobr.cliente.Jogada;
 
 public abstract class Peca implements Jogada {
+	private static final long serialVersionUID = 1L;
+	
 	protected int numeroDeCasas;
 	protected boolean podeSeMovimentar;
 	protected EstadoPeca estado;
@@ -26,12 +28,7 @@ public abstract class Peca implements Jogada {
 		// Seta número de casas
 		this.numeroDeCasas = numeroDeCasas;
 	}
-	
-	/*
-	 * Descreve como as peças devem se mover
-	 */
-	abstract void movimentar();
-	
+
 	/*
 	 * Diz quantas casa uma peça pode se mover
 	 */
@@ -49,7 +46,7 @@ public abstract class Peca implements Jogada {
 	/*
 	 * Checa se a peça é capaz de se mover
 	 */
-	public boolean isPodeSeMovimentar() {
+	public boolean podeSeMovimentar() {
 		return podeSeMovimentar;
 	}
 	
@@ -58,13 +55,6 @@ public abstract class Peca implements Jogada {
 	 */
 	public void setPodeSeMovimentar(boolean podeSeMovimentar) {
 		this.podeSeMovimentar = podeSeMovimentar;
-	}
-	
-	/*
-	 * Coloca estado da peça para removida, para ser retirada do tabuleiro
-	 */
-	public void removePeca() {
-		this.estado = EstadoPeca.REMOVIDA;
 	}
 
 	public EstadoPeca getEstado() {

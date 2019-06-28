@@ -72,13 +72,13 @@ public class Tabuleiro implements Jogada {
 		return pos.pegarPecas();
 	}
 
-	public void habilitarPecasAdversariasNaoRei(int posicaoLocal) {
+	public void habilitarPecasAdversariasNaoRei(int idJogadorLocal) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				Peca peca = this.pegarPosicao(i,j).pegarPrimeiraPeca();
 				
 				if (peca != null && 
-					peca.getIdJogador() != posicaoLocal && 
+					peca.getIdJogador() != idJogadorLocal && 
 					peca.getId() != PecaIdentificacao.REI_BRANCO &&
 					peca.getId() != PecaIdentificacao.REI_PRETO) {
 					this.posicoes[i][j].setHabilitada(true);
@@ -87,13 +87,13 @@ public class Tabuleiro implements Jogada {
 		}
 	}
 
-	public void habilitarPecasLocaisNaoRei(int posicaoLocal) {
+	public void habilitarPecasLocaisNaoRei(int idJogadorLocal) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				Peca peca = this.pegarPosicao(i,j).pegarPrimeiraPeca();
 				
 				if (peca != null && 
-					peca.getIdJogador() == posicaoLocal && 
+					peca.getIdJogador() == idJogadorLocal && 
 					peca.getId() != PecaIdentificacao.REI_BRANCO &&
 					peca.getId() != PecaIdentificacao.REI_PRETO) {
 					this.posicoes[i][j].setHabilitada(true);
@@ -102,26 +102,26 @@ public class Tabuleiro implements Jogada {
 		}
 	}
 
-	public void habilitarPecasAdversarias(int posicaoLocal) {
+	public void habilitarPecasAdversarias(int idJogadorLocal) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				Peca peca = this.pegarPosicao(i,j).pegarPrimeiraPeca();
 				
 				if (peca != null && 
-					peca.getIdJogador() != posicaoLocal) {
+					peca.getIdJogador() != idJogadorLocal) {
 					this.posicoes[i][j].setHabilitada(true);
 				}
 			}
 		}
 	}
 
-	public void habilitarPecasLocais(int posicaoLocal) {
+	public void habilitarPecasLocais(int idJogadorLocal) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				Peca peca = this.pegarPosicao(i,j).pegarPrimeiraPeca();
 				
 				if (peca != null && 
-					peca.getIdJogador() == posicaoLocal) {
+					peca.getIdJogador() == idJogadorLocal) {
 					this.posicoes[i][j].setHabilitada(true);
 				}
 			}
@@ -291,7 +291,7 @@ public class Tabuleiro implements Jogada {
 
 				if (peca1 != null && 
 					peca1.getIdJogador() == idJogador &&
-					peca1.isPodeSeMovimentar()) {
+					peca1.podeSeMovimentar()) {
 					this.posicoes[i][j].setHabilitada(true);
 				}
 			}
@@ -433,7 +433,7 @@ public class Tabuleiro implements Jogada {
 		}
 	}
 
-	public Peca pegarReidoJogador(int idJogador) {
+	public Peca pegarReiDoJogador(int idJogador) {
 		Peca retorno = null;
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {

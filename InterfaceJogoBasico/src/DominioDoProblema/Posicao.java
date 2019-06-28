@@ -4,6 +4,8 @@ import DominioDoProblema.Pecas.Peca;
 import br.ufsc.inf.leobr.cliente.Jogada;
 
 public class Posicao implements Jogada {
+	private static final long serialVersionUID = -1931497860221961082L;
+	
 	protected Peca primeiraPeca;
 	protected Peca segundaPeca;
 	protected boolean habilitada;
@@ -18,25 +20,12 @@ public class Posicao implements Jogada {
 		this.segundaPeca = null;
 	}
 	
-	public int pegarX() {
-		return this.x;
-	}
-	
-	public int pegarY() {
-		return this.y;
-	}
-
 	public Peca pegarPrimeiraPeca() {
 		return this.primeiraPeca;
 	}
 
-
 	public Peca[] pegarPecas() {
 		return new Peca[] {this.primeiraPeca, this.segundaPeca};
-	}
-	
-	public boolean temConflito() {
-		return (this.primeiraPeca != null) && (this.segundaPeca != null);
 	}
 	
 	public void atualizarPrimeiraPeca(Peca peca) {
