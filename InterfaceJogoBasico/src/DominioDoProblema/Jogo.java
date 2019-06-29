@@ -183,32 +183,34 @@ public class Jogo {
 		this.jogadorLocal.setPodeUsarCarta(false);
 		
 		Respostas retorno = null;
+		int idJogadorLocal = this.jogadorLocal.getIdJogador();
+		
 		switch (id) {
 		case MOVIMENTO_BRUSCO:
 		case CORREDORES_EXPERIENTES:
 		case SAIR_PELA_TANGENTE:
 			this.setEstadoAtual(EstadoJogo.AGUARDNADO_SELECIONAR_PECA_LOCAL);
-			this.tabuleiro.habilitarPecasLocais(this.jogadorLocal.getIdJogador());
+			this.tabuleiro.habilitarPecasLocais(idJogadorLocal);
 			retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL;
 			
 			break;
 		
 		case SAVE_THE_KING:
 			this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_LOCAL_NAO_REI);
-			this.tabuleiro.habilitarPecasLocaisNaoRei(this.jogadorLocal.getIdJogador());
+			this.tabuleiro.habilitarPecasLocaisNaoRei(idJogadorLocal);
 			retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL_NAO_REI;
 			break;
 			
 			
 		case MAOS_AO_ALTO:
 			this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_ADVERSARIA);
-			this.tabuleiro.habilitarPecasAdversarias(this.jogadorLocal.getIdJogador());
+			this.tabuleiro.habilitarPecasAdversarias(idJogadorLocal);
 			retorno = Respostas.SELECIONAR_UMA_PECA_ADVERSARIA;
 			break;
 	
 		case SACRIFICIO:
 			this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_LOCAL_NAO_REI);
-			this.tabuleiro.habilitarPecasLocaisNaoRei(this.jogadorLocal.getIdJogador());
+			this.tabuleiro.habilitarPecasLocaisNaoRei(idJogadorLocal);
 			retorno = Respostas.SELECIONAR_UMA_PECA_LOCAL_NAO_REI;
 			break;
 			
@@ -344,7 +346,6 @@ public class Jogo {
 		if (this.getEstadoAtual() == EstadoJogo.AGUARDANDO_SELECIONAR_PECA_MOVIMENTO) {
 			Peca peca = this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y);
 			this.pecasSelecionadas.add(peca);
-			
 			switch(peca.getId()) {
 			case BISPO_BRANCO:
 			case BISPO_PRETO:

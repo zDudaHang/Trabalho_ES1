@@ -5,8 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.omg.CORBA.IdentifierHelper;
-
 import DominioDoProblema.ControladorDeCartas;
 import DominioDoProblema.Cartas.Carta;
 import DominioDoProblema.Cartas.CartaIdentificacao;
