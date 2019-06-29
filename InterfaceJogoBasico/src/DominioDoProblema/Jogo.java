@@ -375,9 +375,10 @@ public class Jogo {
 	}
 
 	private Respostas posicaoClicadaUsoDeCarta(int x, int y) {
+		int idJogadorLocal = this.jogadorLocal.getIdJogador();
 		switch(this.getEstadoAtual()) {
 		case AGUARDANDO_SELECIONAR_PECA_ADVERSARIA:
-			this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
+			this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(idJogadorLocal, x, y));
 			this.setEstadoAtual(EstadoJogo.ENVIANDO_JOGADA);
 			return Respostas.ENVIAR_JOGADA;
 		
@@ -391,19 +392,19 @@ public class Jogo {
 			switch(this.cartaUsada) {
 			case CORREDORES_EXPERIENTES:
 			case SAVE_THE_KING:
-				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
+				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(idJogadorLocal, x, y));
 				this.setEstadoAtual(EstadoJogo.ENVIANDO_JOGADA);
 				return Respostas.ENVIAR_JOGADA;
 
 			case MOVIMENTO_BRUSCO:
-				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
-				this.tabuleiro.habilitarMovimentoBrusco(x, y, this.jogadorLocal.getIdJogador());
+				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(idJogadorLocal, x, y));
+				this.tabuleiro.habilitarMovimentoBrusco(x, y, idJogadorLocal);
 				this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_POSICAO);
 				return Respostas.SELECIONAR_POSICAO;
 
 			case SAIR_PELA_TANGENTE:
-				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
-				this.tabuleiro.habilitarSairPelaTangente(x, y, this.jogadorLocal.getIdJogador());
+				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(idJogadorLocal, x, y));
+				this.tabuleiro.habilitarSairPelaTangente(x, y, idJogadorLocal);
 				this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_POSICAO);
 				return Respostas.SELECIONAR_POSICAO;
 
@@ -419,7 +420,7 @@ public class Jogo {
 			break;		
 		case AGUARDANDO_SELECIONAR_PECA_ADVERSARIA_NAO_REI:
 			// Só pode ser o segundo click da carta Sacrifício necessário
-			int idAdversario = this.jogadorLocal.getIdJogador() == 1 ? 2 : 1;
+			int idAdversario = idJogadorLocal == 1 ? 2 : 1;
 			this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(idAdversario, x, y));
 			this.setEstadoAtual(EstadoJogo.ENVIANDO_JOGADA);
 			return Respostas.ENVIAR_JOGADA;
@@ -427,14 +428,14 @@ public class Jogo {
 		case AGUARDANDO_SELECIONAR_PECA_LOCAL_NAO_REI:
 			switch (this.cartaUsada) {
 			case SAVE_THE_KING:
-				this.pecasSelecionadas.add(this.pegarReiDoJogador(this.jogadorLocal.getIdJogador()));
-				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
+				this.pecasSelecionadas.add(this.pegarReiDoJogador(idJogadorLocal));
+				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(idJogadorLocal, x, y));
 				this.setEstadoAtual(EstadoJogo.ENVIANDO_JOGADA);
 				return Respostas.ENVIAR_JOGADA;
 
 			case SACRIFICIO:
-				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(this.jogadorLocal.getIdJogador(), x, y));
-				this.tabuleiro.habilitarPecasAdversariasNaoRei(this.jogadorLocal.getIdJogador());
+				this.pecasSelecionadas.add(this.tabuleiro.pegarPecaDoJogadorNaPosicao(idJogadorLocal, x, y));
+				this.tabuleiro.habilitarPecasAdversariasNaoRei(idJogadorLocal);
 				this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_ADVERSARIA_NAO_REI);
 				return Respostas.SELECIONAR_POSICAO;
 

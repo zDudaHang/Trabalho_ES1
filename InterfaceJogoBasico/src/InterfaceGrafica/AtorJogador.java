@@ -65,7 +65,6 @@ public class AtorJogador {
 	}
 
 	public void receberJogada(Acao jogada) {
-		System.out.println(jogada);
 		Respostas r = this.jogo.recebeJogada(jogada);
 		this.atualizarInterface(jogada);
 		if (jogada.isVitoriaOponente()) {
