@@ -67,6 +67,9 @@ public class AtorJogador {
 	public void receberJogada(Acao jogada) {
 		Respostas r = this.jogo.recebeJogada(jogada);
 		this.atualizarInterface(jogada);
+		
+		this.interfaceJogo.notificarCartaUsada(jogada.getIdCartaUsada());
+		
 		if (jogada.isVitoriaOponente()) {
 			this.interfaceJogo.finalizarJogoComVitoria();
 			this.jogo.finalizarJogo();
@@ -113,11 +116,10 @@ public class AtorJogador {
 	}
 	
 	public void enviarJogada(Acao jogada) {
+		this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
 		try {
-			this.interfaceJogo.atualizarCartas(this.jogo.idCartasMaoJogadorLocal());
 			this.ngServer.enviarJogada(jogada);
 		} catch (NaoJogandoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

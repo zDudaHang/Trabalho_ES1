@@ -25,9 +25,6 @@ public class CartaView extends JLabel {
 		this.setIcon(img);
 		
 	}
-	protected void usarCarta(CartaIdentificacao id) {
-	}
-	
 	protected void setDescricao(String descricao) {
 		this.setToolTipText(descricao);
 	}

@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JTextField;
 
 import DominioDoProblema.Etapa;
@@ -297,5 +298,56 @@ public class InterfaceJogo {
 
 	public void atualizarTextosDasCartas(String[] descricaoCartasDaMao) {
 		this.jogador.atualizarTextosDasCartas(descricaoCartasDaMao);
+	}
+
+	public void notificarCartaUsada(CartaIdentificacao idCartaUsada) {
+		String mensagem = "";
+		switch (idCartaUsada) {
+		case CORREDORES_EXPERIENTES:
+			mensagem = "Oponente utilizou Corredores Experientes";
+			break;
+		case ESCUDOS:
+			mensagem = "Oponente utilizou Escudos";
+			break;
+		case MAOS_AO_ALTO:
+			mensagem = "Oponente utilizou Mãos ao alto";
+			break;
+		case MOVIMENTO_BRUSCO:
+			mensagem = "Oponente utilizou Movimento Brusco";
+			break;
+		case SACRIFICIO:
+			mensagem = "Oponente utilizou Sacrificio";
+			break;
+		case SAIR_PELA_TANGENTE:
+			mensagem = "Oponente utilizou Sair Pela Tangente";
+			break;
+		case SAVE_THE_KING:
+			mensagem = "Oponente utilizou Save the King";
+			break;
+		case SILENCIO_POR_FAVOR:
+			mensagem = "Oponente utilizou Silencio, Por Favor";
+			break;
+		case NENHUMA:
+			mensagem = "Oponente não utilizou cartas nesta etapa";
+			break;
+
+		}
+		
+		JOptionPane pane = new JOptionPane(mensagem, JOptionPane.INFORMATION_MESSAGE);
+		JDialog dialog = pane.createDialog(this.frame, "Jogada recebida");
+		new Thread(new Runnable()
+        {
+          public void run()
+          {
+              try {
+				Thread.sleep(3000);;
+				dialog.dispose();
+				dialog.setVisible(false);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+          }
+        }).start();
+		dialog.setVisible(true);
 	}
 }
