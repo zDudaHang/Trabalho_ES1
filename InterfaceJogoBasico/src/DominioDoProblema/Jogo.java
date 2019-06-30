@@ -80,8 +80,6 @@ public class Jogo {
 		this.tabuleiro.resetPecasJogador(this.jogadorLocal.getIdJogador());
 		this.pecasSelecionadas = new ArrayList<>();
 		this.cartaUsada = CartaIdentificacao.NENHUMA;
-		this.jogadorLocal.setPodeUsarCarta(true);
-		this.jogadorLocal.setJogadorDaVez(false);
 		
 		return Respostas.OK;
 	}
