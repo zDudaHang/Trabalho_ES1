@@ -13,7 +13,7 @@ public class CorredoresExperientes extends Carta {
 	public CorredoresExperientes() {
 		this.id = CartaIdentificacao.CORREDORES_EXPERIENTES;
 		this.nome = "Corredores Experientes";
-		this.descricao = "Uma peça poderá se deslocar 1 casa a mais em sua fase de movimentação durante o restante do jogo.";
+		this.descricao = "[CORREDORES EXPERIENTES]: Uma peça poderá se deslocar 1 casa a mais em sua fase de movimentação durante o restante do jogo.";
 	}
 
 	@Override

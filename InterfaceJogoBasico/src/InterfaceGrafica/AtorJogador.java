@@ -36,6 +36,10 @@ public class AtorJogador {
 		String mensagem = "Você não está conectado!";
 		boolean permitido = jogo.permitidoDesconectar();
 		if (permitido) {
+			jogo.definirConectado(false);
+			Acao jogada = jogo.finalizarJogo();
+			this.enviarJogada(jogada);
+			this.interfaceJogo.finalizarJogoComDerrota();
 			mensagem = ngServer.desconectar();
 			if (mensagem.equals("Sucesso: desconectado de Netgames Server")) {
 				jogo.definirConectado(false);
@@ -180,13 +184,13 @@ public class AtorJogador {
 	public Respostas botaoPassarEtapa() {
 		Respostas retorno = null;
 		Acao jogada = this.jogo.botaoPassarEtapa();
-
 		// Se o jogador local não estiver em modo de espera, enviar a jogada
 		if (jogada.getEtapa() != Etapa.AGUARDANDO_ADVERSARIO) {
 			this.enviarJogada(jogada);
 			this.atualizarInterface(jogada);
 			
 			if (jogada.isVitoriaOponente()) {
+				System.out.println("Vitória do oponente !");
 				this.interfaceJogo.finalizarJogoComDerrota();
 				return Respostas.OK;
 			}

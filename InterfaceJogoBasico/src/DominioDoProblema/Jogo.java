@@ -139,6 +139,7 @@ public class Jogo {
 			
 		} else {
 			this.setupEspera();
+			this.tabuleiro.resetarPecas(this.jogadorLocal.getIdJogador());
 			this.setEstadoAtual(EstadoJogo.ENVIANDO_JOGADA);
 			return Respostas.ENVIAR_JOGADA;
 		}
@@ -232,6 +233,9 @@ public class Jogo {
 		this.tabuleiro.desabilitarTodasAsCasas();
 		Acao retorno = null;
 		Respostas r;
+		if(!conectado) {
+			return this.finalizarJogo();
+		}
 		switch(this.etapaAtual) {
 		case AGUARDANDO_ADVERSARIO:
 			// Executa passos da etapa de compra, e envia a jogada

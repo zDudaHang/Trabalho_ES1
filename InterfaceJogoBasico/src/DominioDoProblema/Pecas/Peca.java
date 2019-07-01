@@ -28,6 +28,8 @@ public abstract class Peca implements Jogada {
 		// Seta número de casas
 		this.numeroDeCasas = numeroDeCasas;
 	}
+	
+	public abstract void resetarPeca();
 
 	/*
 	 * Diz quantas casa uma peça pode se mover

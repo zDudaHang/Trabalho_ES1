@@ -8,4 +8,10 @@ public class Torre extends Peca {
 		// A torre se move 4 casas por vez
 		super(4, jogadorLocalComeca ? PecaIdentificacao.TORRE_BRANCA : PecaIdentificacao.TORRE_PRETA, idJogadorLocal);
 	}
+
+	@Override
+	public void resetarPeca() {
+		this.numeroDeCasas = 4;
+		this.podeSeMovimentar = true;
+	}
 }

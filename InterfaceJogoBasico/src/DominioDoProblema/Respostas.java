@@ -12,5 +12,5 @@ public enum Respostas {
 	OK, 
 	USAR_CARTA,
 	AGUARDAR_ADVERSARIO, 
-	SEM_CARTA_USADA,
+	SEM_CARTA_USADA
 }

@@ -13,7 +13,7 @@ public class SilencioPorFavor extends Carta {
 	public SilencioPorFavor() {
 		this.id = CartaIdentificacao.SILENCIO_POR_FAVOR;
 		this.nome = "Silêncio, por favor";
-		this.descricao = "Durante o próximo turno, o jogador adversário não pode usar cartas";
+		this.descricao = "[SILÊNCIO, POR FAVOR]: Durante o próximo turno, o jogador adversário não pode usar cartas";
 	}
 
 	@Override

@@ -7,4 +7,10 @@ public class Bispo extends Peca {
 		// O bispo se move 2 casas por vez
 		super(2, jogadorLocalComeca ? PecaIdentificacao.BISPO_BRANCO : PecaIdentificacao.BISPO_PRETO, idJogador);
 	}
+
+	@Override
+	public void resetarPeca() {
+		this.numeroDeCasas = 2;
+		this.podeSeMovimentar = true;
+	}
 }

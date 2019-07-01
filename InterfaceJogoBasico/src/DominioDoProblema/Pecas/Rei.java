@@ -8,4 +8,10 @@ public class Rei extends Peca  {
 		// O rei só se mover 1 casa por vez
 		super(1, jogadorLocalComeca ? PecaIdentificacao.REI_BRANCO : PecaIdentificacao.REI_PRETO, idJogador);
 	}
+
+	@Override
+	public void resetarPeca() {
+		this.numeroDeCasas = 1;
+		this.podeSeMovimentar = true;
+	}
 }

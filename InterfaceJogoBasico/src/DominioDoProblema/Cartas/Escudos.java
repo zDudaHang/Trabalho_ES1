@@ -14,7 +14,7 @@ public class Escudos extends Carta {
 	public Escudos() {
 		this.id = CartaIdentificacao.ESCUDOS;
 		this.nome = "Escudos";
-		this.descricao = "Não ocorre dano neste turno";
+		this.descricao = "[ESCUDOS]: Não ocorre dano neste turno";
 	}
 
 	@Override

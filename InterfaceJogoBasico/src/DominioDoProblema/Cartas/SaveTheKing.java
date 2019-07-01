@@ -14,7 +14,7 @@ public class SaveTheKing extends Carta  {
 	public SaveTheKing() {
 		this.id = CartaIdentificacao.SAVE_THE_KING;
 		this.nome = "Save the King";
-		this.descricao = "Troque as posições de uma torre sua e do seu rei.";
+		this.descricao = "[SAVE THE KING]: Troque as posições de uma torre sua e do seu rei.";
 	}
 
 	@Override

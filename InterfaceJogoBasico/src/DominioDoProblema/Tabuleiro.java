@@ -2,6 +2,7 @@ package DominioDoProblema;
 
 
 import DominioDoProblema.Pecas.Bispo;
+import DominioDoProblema.Pecas.EstadoPeca;
 import DominioDoProblema.Pecas.Peca;
 import DominioDoProblema.Pecas.PecaIdentificacao;
 import DominioDoProblema.Pecas.Rei;
@@ -458,5 +459,19 @@ public class Tabuleiro implements Jogada {
 		}
 		
 		return retorno;
+	}
+	
+	public void resetarPecas(int idJogadorLocal) {
+		for(int x = 0; x < 8; x++) {
+			for(int y = 0; y < 8; y++) {
+				Peca[] pecas = this.pegarPecasDaPosicao(x, y);
+				if(pecas[0] != null && pecas[0].getIdJogador() == idJogadorLocal && pecas[0].getEstado() != EstadoPeca.REMOVIDA) {
+					pecas[0].resetarPeca();
+				}
+				if(pecas[1] != null && pecas[1].getIdJogador() == idJogadorLocal && pecas[1].getEstado() != EstadoPeca.REMOVIDA) {
+					pecas[1].resetarPeca();
+				}
+			}
+		}
 	}
 }
