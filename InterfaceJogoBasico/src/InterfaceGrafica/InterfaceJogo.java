@@ -340,7 +340,7 @@ public class InterfaceJogo {
           public void run()
           {
               try {
-				Thread.sleep(3000);;
+				Thread.sleep(1000);;
 				dialog.dispose();
 				dialog.setVisible(false);
 			} catch (InterruptedException e) {

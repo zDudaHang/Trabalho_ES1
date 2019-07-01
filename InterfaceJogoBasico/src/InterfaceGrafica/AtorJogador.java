@@ -68,9 +68,18 @@ public class AtorJogador {
 		Respostas r = this.jogo.recebeJogada(jogada);
 		this.atualizarInterface(jogada);
 		
-		this.interfaceJogo.notificarCartaUsada(jogada.getIdCartaUsada());
+		if (r == Respostas.VITORIA_DO_OPONENTE) {
+			Acao jogadaDerrota = this.jogo.finalizarJogo();
+			this.enviarJogada(jogadaDerrota);
+			System.out.println("[DEBUG] Derrota enviada");
+			
+			this.interfaceJogo.finalizarJogoComDerrota();
+		}
 		
+
+		System.out.println("[DEBUG] isVitoriaOponente = " + jogada.isVitoriaOponente());
 		if (jogada.isVitoriaOponente()) {
+			System.out.println("[DEBUG] Vitória recebida");
 			this.interfaceJogo.finalizarJogoComVitoria();
 			this.jogo.finalizarJogo();
 
@@ -78,6 +87,8 @@ public class AtorJogador {
 			this.interfaceJogo.atualizarTextos(r);
 			this.interfaceJogo.setEtapaDoTurno(this.jogo.getEtapaAtual());
 		}
+
+		this.interfaceJogo.notificarCartaUsada(jogada.getIdCartaUsada());
 	}
 
 	public Respostas cartaClicada(CartaIdentificacao id) {

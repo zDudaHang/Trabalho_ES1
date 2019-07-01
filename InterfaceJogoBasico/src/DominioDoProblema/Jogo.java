@@ -99,8 +99,10 @@ public class Jogo {
 		this.setEstadoAtual(EstadoJogo.AGUARDANDO_USO_CARTA);	
 	
 		if (!this.jogadorLocal.podeUsarCarta()) {
-			return Respostas.ENVIAR_JOGADA;
+			this.setEtapaAtual(Etapa.MOVIMENTO);
+			this.setEstadoAtual(EstadoJogo.AGUARDANDO_SELECIONAR_PECA_MOVIMENTO);
 		}
+
 		return Respostas.USAR_CARTA;
 	}
 	
@@ -473,7 +475,11 @@ public class Jogo {
 		// Caso seja o fim do turno do oponente, inicia o turno do
 		// jogador local
 		if (jogada.getEtapa() == Etapa.USO_CARTA_FIM) {
-			this.passarEtapa();
+			Acao jogada_local = this.passarEtapa();
+			
+			if (jogada_local.isVitoriaOponente()) {
+				return Respostas.VITORIA_DO_OPONENTE;
+			}
 			
 			if (this.getEstadoAtual() == EstadoJogo.AGUARDANDO_USO_CARTA) {
 				return Respostas.USAR_CARTA;
